@@ -12,18 +12,16 @@
             --light: #f5f5f5;
             --accent: #0288d1;
             --danger: #d32f2f;
-            --warning: #f57c00;
             --spreadsheet: #157f43;
-            --shareall: #e65100;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             margin: 0;
             padding: 15px;
             background-color: var(--light);
             color: var(--dark);
         }
-        h1, h2, h3 { text-align: center; color: var(--secondary); margin-top: 5px; }
+        h1, h3 { text-align: center; color: var(--secondary); margin: 5px 0 15px 0; }
         .card {
             background: white;
             padding: 15px;
@@ -31,16 +29,10 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 15px;
         }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
         .form-row {
             display: flex;
             gap: 10px;
-            align-items: center;
+            margin-bottom: 10px;
         }
         .checkbox-group {
             display: flex;
@@ -49,21 +41,14 @@
             padding: 10px 0;
             font-weight: bold;
         }
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-        input, button, select {
+        input, button {
             padding: 12px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
-        input[type="text"], input[type="date"], input[type="number"], select { flex: 1; min-width: 0; }
-        input[type="checkbox"] { width: 20px; height: 20px; }
+        input[type="text"], input[type="date"], input[type="number"] { flex: 1; min-width: 0; }
         
         button {
             background-color: var(--primary);
@@ -72,117 +57,67 @@
             cursor: pointer;
             font-weight: bold;
         }
-        button:active { background-color: var(--secondary); }
         
-        .field-badge {
-            display: inline-flex;
-            align-items: center;
-            background: #edf7ed;
-            border: 1px solid #c8e6c9;
-            padding: 6px 12px;
-            border-radius: 20px;
-            margin: 4px;
-            font-size: 14px;
+        .player-entry {
+            border-bottom: 2px solid #eee;
+            padding: 15px 0;
+            margin-bottom: 10px;
         }
-        .remove-field-btn {
-            background: none;
-            border: none;
-            color: var(--danger);
-            margin-left: 8px;
-            cursor: pointer;
+        .player-header {
             font-weight: bold;
+            font-size: 18px;
+            color: var(--secondary);
+            margin-bottom: 10px;
         }
-
-        .player-row {
-            border-bottom: 3px solid var(--light);
-            padding: 20px 0;
+        .time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background: #edf7ed;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
-        .player-profile {
+        .time-col {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            flex-direction: column;
+            gap: 4px;
         }
-        .player-info {
-            flex: 1;
-        }
-        .player-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0;
-        }
-        .player-meta {
-            font-size: 13px;
-            color: #666;
-            margin: 2px 0 0 0;
-            line-height: 1.4;
-        }
-        
-        .time-box {
-            background: #edf7ed;
-            border: 1px solid #c8e6c9;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .half-header {
-            font-size: 13px;
+        .time-col label {
+            font-size: 11px;
             font-weight: bold;
             color: var(--secondary);
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
-            border-bottom: 1px dashed #c8e6c9;
-            padding-bottom: 2px;
         }
-        .time-control-row {
+        .stat-flex {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        .time-control-row label {
-            font-size: 12px;
-            font-weight: 500;
-            width: 85px;
-        }
-        .timer-action-btn {
-            padding: 6px 10px;
-            font-size: 12px;
-            background-color: var(--primary);
-            border-radius: 4px;
-        }
-        .timer-action-btn.active-run {
-            background-color: var(--danger);
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: 10px;
         }
-        .stat-box {
+        .stat-item {
             background: #e3f2fd;
             border: 1px solid #90caf9;
-            padding: 10px;
+            padding: 8px;
             border-radius: 5px;
-            text-align: center;
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 120px;
+            justify-content: space-between;
         }
-        .counter-btn { background-color: var(--accent); font-size: 18px; padding: 8px; }
+        .stat-item span { font-weight: bold; font-size: 14px; }
+        .count-num { font-size: 16px; color: var(--accent); font-weight: bold; min-width: 20px; text-align: center; }
+        .plus-btn { background-color: var(--accent); padding: 5px 10px; font-size: 14px; }
         
-        .share-row-layout {
+        .action-row {
             display: flex;
             gap: 8px;
             margin-top: 12px;
         }
         .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 10px; }
         .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 10px; }
-
-        .spreadsheet-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-top: 15px;}
-        .delete-btn { background-color: var(--danger); padding: 5px 10px; font-size: 12px; }
+        .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -190,346 +125,202 @@
     <h1>⚽ Soccer Session Tracker</h1>
 
     <div class="card">
-        <h3>1. Session Setup</h3>
-        
+        <h3>1. Session Information</h3>
         <div class="checkbox-group">
-            <label><input type="checkbox" id="check-game" onchange="changeType('Game')"> Game</label>
-            <label><input type="checkbox" id="check-scrimmage" onchange="changeType('Scrimmage')"> Scrimmage</label>
-            <label><input type="checkbox" id="check-practice" onchange="changeType('Practice')" checked> Practice</label>
+            <label><input type="radio" name="stype" id="p-game"> Game</label>
+            <label><input type="radio" name="stype" id="p-scrimmage"> Scrimmage</label>
+            <label><input type="radio" name="stype" id="p-practice" checked> Practice</label>
         </div>
-
-        <div class="form-group">
-            <div class="form-row">
-                <input type="date" id="match-date">
-                <input type="text" id="match-opponent" placeholder="Opponent / Title Description">
-            </div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
-
         <div class="form-row">
-            <input type="text" id="new-stat-name" placeholder="New stat item (e.g. Shots, Saves)">
-            <button onclick="addNewStatField()">Add Field</button>
-        </div>
-        <div id="active-stats-list" style="margin-top: 10px;"></div>
-    </div>
-
-    <div class="card">
-        <h3>2. Add Player</h3>
-        <div class="form-group">
-            <div class="form-row">
-                <input type="text" id="player-name" placeholder="Player Full Name">
-                <input type="text" id="player-jersey" placeholder="Jersey #" style="max-width: 90px;">
-            </div>
-            
-            <div class="form-row">
-                <input type="text" id="player-position" placeholder="Position / Role">
-                <input type="number" id="player-age" placeholder="Age" style="max-width: 80px;">
-            </div>
-
-            <div class="form-row">
-                <input type="text" id="player-height" placeholder="Height">
-                <input type="text" id="player-weight" placeholder="Weight">
-            </div>
-
-            <button onclick="registerNewPlayer()">Add Player to Roster</button>
+            <input type="date" id="m-date">
+            <input type="text" id="m-desc" placeholder="Opponent Name / Notes">
         </div>
     </div>
 
     <div class="card">
-        <h2>Roster Metric Panel</h2>
-        <div id="roster-container"></div>
-        
-        <button class="spreadsheet-btn" onclick="exportToCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
-        
-        <div class="share-row-layout">
-            <button class="sms-btn" onclick="shareEntireRosterSummary('sms')">💬 Text Squad Summary</button>
-            <button class="email-btn" onclick="shareEntireRosterSummary('email')">✉️ Email Squad Summary</button>
+        <h3>2. Active Roster Metric Panel</h3>
+        <div id="roster-list">
+            <div class="player-entry">
+                <div class="player-header">⚽ Player 1 Input Configuration</div>
+                <div class="form-row">
+                    <input type="text" id="p1-name" placeholder="Player Name" value="Striker One">
+                    <input type="text" id="p1-jersey" placeholder="Jersey #" style="max-width:80px;" value="9">
+                </div>
+                <div class="time-grid">
+                    <div class="time-col">
+                        <label>H1 PLAYED (MINS)</label>
+                        <input type="number" id="p1-h1p" value="0">
+                        <label>H1 BENCH (MINS)</label>
+                        <input type="number" id="p1-h1b" value="0">
+                    </div>
+                    <div class="time-col">
+                        <label>H2 PLAYED (MINS)</label>
+                        <input type="number" id="p1-h2p" value="0">
+                        <label>H2 BENCH (MINS)</label>
+                        <input type="number" id="p1-h2b" value="0">
+                    </div>
+                </div>
+                <div class="stat-flex">
+                    <div class="stat-item">
+                        <span>Shots:</span>
+                        <span class="count-num" id="p1-s1-val">0</span>
+                        <button class="plus-btn" onclick="add('p1-s1-val')">+1</button>
+                    </div>
+                    <div class="stat-item">
+                        <span>Saves:</span>
+                        <span class="count-num" id="p1-s2-val">0</span>
+                        <button class="plus-btn" onclick="add('p1-s2-val')">+1</button>
+                    </div>
+                    <div class="stat-item">
+                        <span>Goals:</span>
+                        <span class="count-num" id="p1-s3-val">0</span>
+                        <button class="plus-btn" onclick="add('p1-s3-val')">+1</button>
+                    </div>
+                </div>
+                <div class="action-row">
+                    <button class="sms-btn" onclick="shareSingle('p1', 'sms')">💬 Text Player</button>
+                    <button class="email-btn" onclick="shareSingle('p1', 'email')">✉️ Email Player</button>
+                </div>
+            </div>
+
+            <div class="player-entry">
+                <div class="player-header">⚽ Player 2 Input Configuration</div>
+                <div class="form-row">
+                    <input type="text" id="p2-name" placeholder="Player Name" value="Midfield Two">
+                    <input type="text" id="p2-jersey" placeholder="Jersey #" style="max-width:80px;" value="10">
+                </div>
+                <div class="time-grid">
+                    <div class="time-col">
+                        <label>H1 PLAYED (MINS)</label>
+                        <input type="number" id="p2-h1p" value="0">
+                        <label>H1 BENCH (MINS)</label>
+                        <input type="number" id="p2-h1b" value="0">
+                    </div>
+                    <div class="time-col">
+                        <label>H2 PLAYED (MINS)</label>
+                        <input type="number" id="p2-h2p" value="0">
+                        <label>H2 BENCH (MINS)</label>
+                        <input type="number" id="p2-h2b" value="0">
+                    </div>
+                </div>
+                <div class="stat-flex">
+                    <div class="stat-item">
+                        <span>Shots:</span>
+                        <span class="count-num" id="p2-s1-val">0</span>
+                        <button class="plus-btn" onclick="add('p2-s1-val')">+1</button>
+                    </div>
+                    <div class="stat-item">
+                        <span>Saves:</span>
+                        <span class="count-num" id="p2-s2-val">0</span>
+                        <button class="plus-btn" onclick="add('p2-s2-val')">+1</button>
+                    </div>
+                    <div class="stat-item">
+                        <span>Goals:</span>
+                        <span class="count-num" id="p2-s3-val">0</span>
+                        <button class="plus-btn" onclick="add('p2-s3-val')">+1</button>
+                    </div>
+                </div>
+                <div class="action-row">
+                    <button class="sms-btn" onclick="shareSingle('p2', 'sms')">💬 Text Player</button>
+                    <button class="email-btn" onclick="shareSingle('p2', 'email')">✉️ Email Player</button>
+                </div>
+            </div>
+
         </div>
+
+        <button class="master-btn" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
+        <button class="master-btn" style="background-color:#e65100;" onclick="shareSquad()">🏆 Text Full Team Summary</button>
     </div>
 
     <script>
-        let statsSchema = [];
-        let players = [];
-        let clockInterval = null;
+        // Set standard baseline timeline
+        document.getElementById('m-date').valueAsDate = new Date();
 
-        try {
-            let rawSchema = localStorage.getItem('gh_soccer_schema_v9');
-            let rawPlayers = localStorage.getItem('gh_soccer_players_v9');
-            if (rawSchema) statsSchema = JSON.parse(rawSchema);
-            if (rawPlayers) players = JSON.parse(rawPlayers);
-        } catch(e) {
-            statsSchema = [];
-            players = [];
+        function add(elementId) {
+            var target = document.getElementById(elementId);
+            var current = parseInt(target.innerText) || 0;
+            target.innerText = current + 1;
         }
 
-        document.getElementById('match-date').valueAsDate = new Date();
-
-        function changeType(type) {
-            document.getElementById('check-game').checked = (type === 'Game');
-            document.getElementById('check-scrimmage').checked = (type === 'Scrimmage');
-            document.getElementById('check-practice').checked = (type === 'Practice');
-        }
-
-        function currentTypeString() {
-            if (document.getElementById('check-game').checked) return "Game";
-            if (document.getElementById('check-scrimmage').checked) return "Scrimmage";
+        function getSessionType() {
+            if(document.getElementById('p-game').checked) return "Game";
+            if(document.getElementById('p-scrimmage').checked) return "Scrimmage";
             return "Practice";
         }
 
-        function saveAppState() {
-            localStorage.setItem('gh_soccer_schema_v9', JSON.stringify(statsSchema));
-            localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
-            renderInterface();
-        }
-
-        function addNewStatField() {
-            const input = document.getElementById('new-stat-name');
-            const name = input.value.trim();
-            if (name && !statsSchema.includes(name)) {
-                statsSchema.push(name);
-                players.forEach(p => {
-                    if (!p.stats) p.stats = {};
-                    p.stats[name] = 0;
-                });
-                input.value = '';
-                saveAppState();
-            }
-        }
-
-        function removeStatField(name) {
-            if (confirm(`Remove custom metric "${name}" entirely?`)) {
-                statsSchema = statsSchema.filter(s => s !== name);
-                players.forEach(p => { if (p.stats) delete p.stats[name]; });
-                saveAppState();
-            }
-        }
-
-        function registerNewPlayer() {
-            const nameInp = document.getElementById('player-name');
-            const jerseyInp = document.getElementById('player-jersey');
-            const posInp = document.getElementById('player-position');
-            const ageInp = document.getElementById('player-age');
-            const hInp = document.getElementById('player-height');
-            const wInp = document.getElementById('player-weight');
-
-            if (!nameInp.value.trim()) {
-                alert("Please enter a player name.");
-                return;
-            }
-
-            let initialStats = {};
-            statsSchema.forEach(s => initialStats[s] = 0);
-
-            players.push({
-                id: Date.now(),
-                name: nameInp.value.trim(),
-                jersey: jerseyInp.value.trim() || "N/A",
-                position: posInp.value.trim() || "N/A",
-                age: ageInp.value.trim() || "N/A",
-                height: hInp.value.trim() || "N/A",
-                weight: wInp.value.trim() || "N/A",
-                stats: initialStats,
-                h1Play: 0, h1Sat: 0,
-                h2Play: 0, h2Sat: 0,
-                activeClock: null
-            });
-
-            nameInp.value = ''; jerseyInp.value = ''; posInp.value = ''; ageInp.value = ''; hInp.value = ''; wInp.value = '';
-            saveAppState();
-        }
-
-        function updateTimeManual(playerId, key, val) {
-            let player = players.find(p => p.id === playerId);
-            if (player) {
-                player[key] = parseFloat(val) || 0;
-                localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
-            }
-        }
-
-        function toggleClock(playerId, clockType) {
-            let player = players.find(p => p.id === playerId);
-            if (!player) return;
-
-            if (player.activeClock === clockType) {
-                player.activeClock = null;
-            } else {
-                player.activeClock = clockType;
-            }
-
-            localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
-            renderInterface();
-            startGlobalTicker();
-        }
-
-        function startGlobalTicker() {
-            let dynamicActive = players.some(p => p.activeClock !== null);
-            if (!dynamicActive) {
-                if (clockInterval) { clearInterval(clockInterval); clockInterval = null; }
-                return;
-            }
-
-            if (!clockInterval) {
-                clockInterval = setInterval(() => {
-                    players.forEach(p => {
-                        if (p.activeClock) {
-                            p[p.activeClock] = (parseFloat(p[p.activeClock]) || 0) + 1;
-                        }
-                    });
-                    localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
-                    renderInterface();
-                }, 60000);
-            }
-        }
-
-        function addOne(playerId, stat) {
-            let player = players.find(p => p.id === playerId);
-            if (player) {
-                if (!player.stats) player.stats = {};
-                player.stats[stat] = (parseInt(player.stats[stat]) || 0) + 1;
-                saveAppState();
-            }
-        }
-
-        function dropPlayer(id) {
-            if (confirm("Delete this player profile completely from the roster?")) {
-                players = players.filter(p => p.id !== id);
-                saveAppState();
-            }
-        }
-
-        function compileIndividualMessage(p) {
-            let type = currentTypeString();
-            let desc = document.getElementById('match-opponent').value.trim() || type;
-            let date = document.getElementById('match-date').value;
-
-            let msg = `📊 STAT REPORT: ${desc.toUpperCase()} (${date})\n`;
-            msg += `Player: #${p.jersey} ${p.name}\n`;
-            msg += `Position: ${p.position} | Age: ${p.age}\n`;
-            msg += `------------------------\n`;
-            msg += `⏱️ H1 Played: ${p.h1Play || '0'} min | Sat: ${p.h1Sat || '0'} min\n`;
-            msg += `⏱️ H2 Played: ${p.h2Play || '0'} min | Sat: ${p.h2Sat || '0'} min\n`;
-            msg += `------------------------\n`;
+        function buildText(prefix) {
+            var name = document.getElementById(prefix + '-name').value;
+            var jrs = document.getElementById(prefix + '-jersey').value;
+            var h1p = document.getElementById(prefix + '-h1p').value;
+            var h1b = document.getElementById(prefix + '-h1b').value;
+            var h2p = document.getElementById(prefix + '-h2p').value;
+            var h2b = document.getElementById(prefix + '-h2b').value;
             
-            statsSchema.forEach(stat => {
-                msg += `- ${stat}: ${(p.stats && p.stats[stat] !== undefined) ? p.stats[stat] : 0}\n`;
-            });
-            return msg;
+            var s1 = document.getElementById(prefix + '-s1-val').innerText;
+            var s2 = document.getElementById(prefix + '-s2-val').innerText;
+            var s3 = document.getElementById(prefix + '-s3-val').innerText;
+
+            var txt = "📊 STAT REPORT\n" +
+                      "Player: #" + jrs + " " + name + "\n" +
+                      "H1 Play/Bench: " + h1p + "/" + h1b + "m\n" +
+                      "H2 Play/Bench: " + h2p + "/" + h2b + "m\n" +
+                      "Shots: " + s1 + " | Saves: " + s2 + " | Goals: " + s3;
+            return txt;
         }
 
-        function sendDirectIndividualShare(id, targetMedium) {
-            let p = players.find(player => player.id === id);
-            if (!p) return;
-            let text = compileIndividualMessage(p);
-
-            if (targetMedium === 'sms') {
-                window.location.href = `sms:?&body=${encodeURIComponent(text)}`;
+        function shareSingle(prefix, medium) {
+            var msg = buildText(prefix);
+            if(medium === 'sms') {
+                window.location.href = "sms:?&body=" + encodeURIComponent(msg);
             } else {
-                window.location.href = `mailto:?subject=${encodeURIComponent(p.name + ' Match Data Update')}&body=${encodeURIComponent(text)}`;
+                window.location.href = "mailto:?subject=Soccer Tracking Update&body=" + encodeURIComponent(msg);
             }
         }
 
-        function shareEntireRosterSummary(targetMedium) {
-            if (players.length === 0) {
-                alert("Roster is empty.");
-                return;
-            }
-            let type = currentTypeString();
-            let desc = document.getElementById('match-opponent').value.trim() || type;
-            let date = document.getElementById('match-date').value;
+        function shareSquad() {
+            var date = document.getElementById('m-date').value;
+            var type = getSessionType();
+            var desc = document.getElementById('m-desc').value || type;
 
-            let masterMsg = `🏆 SQUAD SUMMARY: ${desc.toUpperCase()} (${date})\n`;
-            masterMsg += `========================\n\n`;
+            var master = "🏆 SQUAD SUMMARY: " + desc.toUpperCase() + " (" + date + ")\n\n";
+            master += buildText('p1') + "\n\n----------------\n\n";
+            master += buildText('p2');
 
-            players.forEach(p => {
-                masterMsg += `#${p.jersey} ${p.name} (${p.position})\n`;
-                masterMsg += `H1 Play/Sat: ${p.h1Play||'0'}/${p.h1Sat||'0'}m | H2 Play/Sat: ${p.h2Play||'0'}/${p.h2Sat||'0'}m\n`;
-                statsSchema.forEach(stat => {
-                    masterMsg += `• ${stat}: ${(p.stats && p.stats[stat] !== undefined) ? p.stats[stat] : 0}  `;
-                });
-                masterMsg += `\n\n------------------------\n\n`;
-            });
-
-            if (targetMedium === 'sms') {
-                window.location.href = `sms:?&body=${encodeURIComponent(masterMsg)}`;
-            } else {
-                window.location.href = `mailto:?subject=${encodeURIComponent('Full Team Summary Report')}&body=${encodeURIComponent(masterMsg)}`;
-            }
+            window.location.href = "sms:?&body=" + encodeURIComponent(master);
         }
 
-        function exportToCSV() {
-            if (players.length === 0) {
-                alert("No tracker entries available to export.");
-                return;
-            }
+        function extractCSV() {
+            var date = document.getElementById('m-date').value;
+            var type = getSessionType();
+            var desc = document.getElementById('m-desc').value || type;
 
-            let headers = [
-                "Date", "Session Type", "Context Description", "Jersey #", "Player Name", 
-                "Position", "Age", "Height", "Weight", "H1 Played", "H1 Benched", "H2 Played", "H2 Benched"
-            ];
-            let combinedHeaders = headers.concat(statsSchema);
-            let rows = [combinedHeaders.join(',')];
+            var csv = "Date,Session Type,Description,Player,Jersey,H1 Played,H1 Bench,H2 Played,H2 Bench,Shots,Saves,Goals\n";
+            
+            // Player 1 line item compilation array
+            csv += date + "," + type + "," + desc + "," + 
+                   document.getElementById('p1-name').value + "," + document.getElementById('p1-jersey').value + "," +
+                   document.getElementById('p1-h1p').value + "," + document.getElementById('p1-h1b').value + "," +
+                   document.getElementById('p1-h2p').value + "," + document.getElementById('p1-h2b').value + "," +
+                   document.getElementById('p1-s1-val').innerText + "," + document.getElementById('p1-s2-val').innerText + "," +
+                   document.getElementById('p1-s3-val').innerText + "\n";
 
-            let type = currentTypeString();
-            let desc = document.getElementById('match-opponent').value.trim() || type;
-            let date = document.getElementById('match-date').value;
+            // Player 2 line item compilation array
+            csv += date + "," + type + "," + desc + "," + 
+                   document.getElementById('p2-name').value + "," + document.getElementById('p2-jersey').value + "," +
+                   document.getElementById('p2-h1p').value + "," + document.getElementById('p2-h1b').value + "," +
+                   document.getElementById('p2-h2p').value + "," + document.getElementById('p2-h2b').value + "," +
+                   document.getElementById('p2-s1-val').innerText + "," + document.getElementById('p2-s2-val').innerText + "," +
+                   document.getElementById('p2-s3-val').innerText + "\n";
 
-            players.forEach(p => {
-                let currentLine = [
-                    date, type, desc, p.jersey, p.name, p.position, p.age, p.height, p.weight,
-                    p.h1Play || "0", p.h1Sat || "0", p.h2Play || "0", p.h2Sat || "0"
-                ];
-                
-                statsSchema.forEach(stat => {
-                    currentLine.push((p.stats && p.stats[stat] !== undefined) ? p.stats[stat] : 0);
-                });
-
-                let formattedLine = currentLine.map(item => {
-                    let text = String(item);
-                    if (text.includes(',') || text.includes('"') || text.includes('\n')) {
-                        text = '"' + text.replace(/"/g, '""') + '"';
-                    }
-                    return text;
-                });
-                rows.push(formattedLine.join(','));
-            });
-
-            let csvData = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-            let downloadAnchor = document.createElement("a");
-            if (downloadAnchor.download !== undefined) {
-                let linkUrl = URL.createObjectURL(csvData);
-                downloadAnchor.setAttribute("href", linkUrl);
-                downloadAnchor.setAttribute("download", `soccer_stats_${date}.csv`);
-                downloadAnchor.setAttribute("style", "display:none");
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                document.body.removeChild(downloadAnchor);
-            }
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var dl = document.createElement("a");
+            dl.setAttribute("href", URL.createObjectURL(blob));
+            dl.setAttribute("download", "soccer_metrics.csv");
+            dl.setAttribute("style", "display:none");
+            document.body.appendChild(dl);
+            dl.click();
+            document.body.removeChild(dl);
         }
-
-        function renderInterface() {
-            const badgeBox = document.getElementById('active-stats-list');
-            badgeBox.innerHTML = statsSchema.length === 0 ? '<span style="color:#888; font-size:13px;">No tracking items set.</span>' : '';
-            statsSchema.forEach(stat => {
-                let badge = document.createElement('span');
-                badge.className = 'field-badge';
-                badge.innerHTML = `${stat} <button class="remove-field-btn" onclick="removeStatField('${stat}')">×</button>`;
-                badgeBox.appendChild(badge);
-            });
-
-            const container = document.getElementById('roster-container');
-            container.innerHTML = '';
-
-            if (players.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#888; padding:10px;">Roster empty. Register players above.</p>';
-                return;
-            }
-
-            players.forEach(p => {
-                let playerRow = document.createElement('div');
-                playerRow.className = 'player-row';
-
-                let profile = document.createElement('div');
-                profile.className = 'player-profile';
-                profile.innerHTML = `
-   
+    </script>
+</body>
+</html>
