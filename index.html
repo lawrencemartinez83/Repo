@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" id="main-html-tag">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@
         }
         h1, h3 { text-align: center; color: var(--secondary); margin: 5px 0 15px 0; }
         
-        /* Language Picker Row Style Layout */
+        /* Language Selection Controls bar layout */
         .lang-bar {
             display: flex;
             justify-content: center;
@@ -34,19 +34,24 @@
             border-radius: 8px;
         }
         .lang-btn {
-            padding: 6px 12px;
-            font-size: 13px;
+            padding: 8px 14px;
+            font-size: 14px;
             background-color: #fff;
             color: var(--dark);
             border: 1px solid #bbb;
             width: auto;
             border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
         }
         .lang-btn.active-lang {
             background-color: var(--secondary);
             color: #fff;
             border-color: var(--secondary);
         }
+
+        /* Language Visibility System Toggles */
+        .lang-es, .lang-ar, .lang-hi { display: none; }
 
         .card {
             background: white;
@@ -118,8 +123,7 @@
             font-size: 13px;
             font-weight: bold;
             color: var(--secondary);
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
+            margin: 0;
         }
         .time-row-layout {
             display: flex;
@@ -190,246 +194,244 @@
 <body>
 
     <div class="lang-bar">
-        <button class="lang-btn active-lang" id="btn-lang-en" onclick="translateAppTo('en')">English</button>
-        <button class="lang-btn" id="btn-lang-es" onclick="translateAppTo('es')">Español</button>
-        <button class="lang-btn" id="btn-lang-ar" onclick="translateAppTo('ar')">العربية</button>
-        <button class="lang-btn" id="btn-lang-hi" onclick="translateAppTo('hi')">हिन्दी</button>
+        <button class="lang-btn active-lang" id="tab-en" onclick="swapLanguageDisplay('en')">English</button>
+        <button class="lang-btn" id="tab-es" onclick="swapLanguageDisplay('es')">Español</button>
+        <button class="lang-btn" id="tab-ar" onclick="swapLanguageDisplay('ar')">العربية</button>
+        <button class="lang-btn" id="tab-hi" onclick="swapLanguageDisplay('hi')">हिन्दी</button>
     </div>
 
-    <h1 id="ui-main-title">⚽ Soccer Session Tracker</h1>
+    <h1 class="lang-en">⚽ Soccer Session Tracker</h1>
+    <h1 class="lang-es">⚽ Rastreador de Sesión de Fútbol</h1>
+    <h1 class="lang-ar">⚽ متتبع جلسات كرة القدم</h1>
+    <h1 class="lang-hi">⚽ सॉकर सेशन और स्टेट ट्रैकर</h1>
 
     <div class="card">
-        <h3 id="ui-h3-session-info">1. Session Information</h3>
+        <h3 class="lang-en">1. Session Information</h3>
+        <h3 class="lang-es">1. Información de la Sesión</h3>
+        <h3 class="lang-ar">1. معلومات الجلسة</h3>
+        <h3 class="lang-hi">1. सेशन की जानकारी</h3>
+
         <div class="checkbox-group">
-            <label style="display:flex; align-items:center; gap:5px;"><input type="radio" name="stype" id="p-game" style="width:auto;"><span id="ui-lbl-game">Game</span></label>
-            <label style="display:flex; align-items:center; gap:5px;"><input type="radio" name="stype" id="p-scrimmage" style="width:auto;"><span id="ui-lbl-scrimmage">Scrimmage</span></label>
-            <label style="display:flex; align-items:center; gap:5px;"><input type="radio" name="stype" id="p-practice" checked style="width:auto;"><span id="ui-lbl-practice">Practice</span></label>
+            <label style="display:flex; align-items:center; gap:5px;">
+                <input type="radio" name="stype" id="p-game" style="width:auto;">
+                <span class="lang-en">Game</span><span class="lang-es">Partido</span><span class="lang-ar">مباراة</span><span class="lang-hi">मैच</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:5px;">
+                <input type="radio" name="stype" id="p-scrimmage" style="width:auto;">
+                <span class="lang-en">Scrimmage</span><span class="lang-es">Interescuadras</span><span class="lang-ar">تقسيمة</span><span class="lang-hi">अभ्यास मैच</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:5px;">
+                <input type="radio" name="stype" id="p-practice" checked style="width:auto;">
+                <span class="lang-en">Practice</span><span class="lang-es">Entrenamiento</span><span class="lang-ar">تدريب</span><span class="lang-hi">प्रैक्टिस</span>
+            </label>
         </div>
         <div class="form-row">
             <input type="date" id="m-date">
-            <input type="text" id="m-desc" placeholder="Opponent Name / Notes">
+            <input type="text" id="m-desc-en" class="lang-en" placeholder="Opponent Name / Notes">
+            <input type="text" id="m-desc-es" class="lang-es" placeholder="Nombre del Rival / Notas">
+            <input type="text" id="m-desc-ar" class="lang-ar" placeholder="اسم الخصم / ملاحظات">
+            <input type="text" id="m-desc-hi" class="lang-hi" placeholder="विपक्षी टीम का नाम / नोट्स">
         </div>
     </div>
 
     <div class="card">
-        <h3 id="ui-h3-custom-mgr">2. Custom Fields Manager</h3>
+        <h3 class="lang-en">2. Custom Fields Manager</h3>
+        <h3 class="lang-es">2. Gestor de Campos Personalizados</h3>
+        <h3 class="lang-ar">2. مدير الحقول المخصصة</h3>
+        <h3 class="lang-hi">2. कस्टम फ़ील्ड मैनेजर</h3>
+
         <div class="form-row">
-            <input type="text" id="custom-field-input" placeholder="Type metric (e.g. Goals, Miles Ran, Assists)">
-            <button id="ui-btn-create-field" style="background-color: var(--accent); width:auto; white-space:nowrap;" onclick="generateMetricField()">Create Field</button>
+            <input type="text" id="cf-input-en" class="lang-en" placeholder="Type metric (e.g. Goals, Miles Ran)">
+            <input type="text" id="cf-input-es" class="lang-es" placeholder="Escribe la métrica (ej. Goles, Millas)">
+            <input type="text" id="cf-input-ar" class="lang-ar" placeholder="اكتب المقياس (مثل أهداف، الأميال)">
+            <input type="text" id="cf-input-hi" class="lang-hi" placeholder="मेट्रिक टाइप करें (जैसे गोल, दौड़े गए मील)">
+
+            <button style="background-color: var(--accent); width:auto; white-space:nowrap;" onclick="generateMetricField()">
+                <span class="lang-en">Create Field</span><span class="lang-es">Crear Campo</span><span class="lang-ar">إنشاء حقل</span><span class="lang-hi">फ़ील्ड बनाएं</span>
+            </button>
         </div>
     </div>
 
     <div class="card">
-        <h3 id="ui-h3-metric-panel">3. Active Roster Metric Panel</h3>
-        <div id="roster-list">
+        <h3 class="lang-en">3. Active Roster Metric Panel</h3>
+        <h3 class="lang-es">3. Panel de Métricas de la Plantilla</h3>
+        <h3 class="lang-ar">3. لوحة مقاييس قائمة اللاعبين النشطة</h3>
+        <h3 class="lang-hi">3. एक्टिव रोस्टर मेट्रिक पैनल</h3>
+
+        <div class="player-entry">
+            <div class="player-header lang-en">⚽ Player Identity Data Configuration</div>
+            <div class="player-header lang-es">⚽ Configuración de Identidad del Jugador</div>
+            <div class="player-header lang-ar">⚽ تكوين بيانات هوية اللاعب</div>
+            <div class="player-header lang-hi">⚽ खिलाड़ी पहचान डेटा कॉन्फ़िगरेशन</div>
             
-            <div class="player-entry">
-                <div class="player-header" id="ui-player-config-title">⚽ Player Identity Data Configuration</div>
-                
-                <div class="form-row">
-                    <div class="label-group" style="flex: 3;">
-                        <label id="ui-lbl-pname">Player Name:</label>
-                        <input type="text" id="p1-name" placeholder="Enter full name" value="Striker One">
+            <div class="form-row">
+                <div class="label-group" style="flex: 3;">
+                    <label class="lang-en">Player Name:</label><label class="lang-es">Nombre del Jugador:</label><label class="lang-ar">اسم اللاعب:</label><label class="lang-hi">खिलाड़ी का नाम:</label>
+                    <input type="text" id="p1-name" value="Striker One">
+                </div>
+                <div class="label-group" style="flex: 1;">
+                    <label class="lang-en">Age:</label><label class="lang-es">Edad:</label><label class="lang-ar">العمر:</label><label class="lang-hi">उम्र:</label>
+                    <input type="number" id="p1-age" value="12">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="label-group" style="flex: 3;">
+                    <label class="lang-en">Player Position:</label><label class="lang-es">Posición del Jugador:</label><label class="lang-ar">مركز اللاعب:</label><label class="lang-hi">खिलाड़ी की पोजीशन:</label>
+                    <input type="text" id="p1-position" value="Forward">
+                </div>
+                <div class="label-group" style="flex: 1;">
+                    <label class="lang-en">Player Number:</label><label class="lang-es">Número:</label><label class="lang-ar">رقم اللاعب:</label><label class="lang-hi">खिलाड़ी नंबर:</label>
+                    <input type="text" id="p1-jersey" value="9">
+                </div>
+            </div>
+            
+            <div class="time-box-container" style="margin-top:15px;">
+                <div class="time-row-layout">
+                    <span class="half-title lang-en" style="min-width:90px;">1st Half:</span>
+                    <span class="half-title lang-es" style="min-width:90px;">1er Tiempo:</span>
+                    <span class="half-title lang-ar" style="min-width:90px;">الشوط الأول:</span>
+                    <span class="half-title lang-hi" style="min-width:90px;">पहला हाफ:</span>
+                    <div class="mini-input-wrapper">
+                        <label class="lang-en">Played:</label><label class="lang-es">Jugado:</label><label class="lang-ar">لعب:</label><label class="lang-hi">खेला:</label>
+                        <input type="number" id="p1-h1p" value="0">
                     </div>
-                    <div class="label-group" style="flex: 1;">
-                        <label id="ui-lbl-page">Age:</label>
-                        <input type="number" id="p1-age" placeholder="Age" value="12">
+                    <div class="mini-input-wrapper">
+                        <label class="lang-en">Benched:</label><label class="lang-es">Banca:</label><label class="lang-ar">بديل:</label><label class="lang-hi">बेंच:</label>
+                        <input type="number" id="p1-h1b" value="0">
                     </div>
                 </div>
                 
-                <div class="form-row">
-                    <div class="label-group" style="flex: 3;">
-                        <label id="ui-lbl-pposition">Player Position:</label>
-                        <input type="text" id="p1-position" placeholder="e.g. Midfielder, Forward" value="Forward">
+                <div class="time-row-layout" style="margin-top: 10px;">
+                    <span class="half-title lang-en" style="min-width:90px;">2nd Half:</span>
+                    <span class="half-title lang-es" style="min-width:90px;">2do Tiempo:</span>
+                    <span class="half-title lang-ar" style="min-width:90px;">الشوط الثاني:</span>
+                    <span class="half-title lang-hi" style="min-width:90px;">दूसरा हाफ:</span>
+                    <div class="mini-input-wrapper">
+                        <label class="lang-en">Played:</label><label class="lang-es">Jugado:</label><label class="lang-ar">لعب:</label><label class="lang-hi">खेला:</label>
+                        <input type="number" id="p1-h2p" value="0">
                     </div>
-                    <div class="label-group" style="flex: 1;">
-                        <label id="ui-lbl-pnumber">Player Number:</label>
-                        <input type="text" id="p1-jersey" placeholder="#" value="9">
+                    <div class="mini-input-wrapper">
+                        <label class="lang-en">Benched:</label><label class="lang-es">Banca:</label><label class="lang-ar">بديل:</label><label class="lang-hi">बेंच:</label>
+                        <input type="number" id="p1-h2b" value="0">
                     </div>
-                </div>
-                
-                <div class="time-box-container" style="margin-top:15px;">
-                    <div class="time-row-layout">
-                        <span class="half-title" id="ui-title-h1" style="min-width: 90px; margin: 0;">1st Half:</span>
-                        <div class="mini-input-wrapper">
-                            <label id="ui-lbl-h1p">Played:</label>
-                            <input type="number" id="p1-h1p" value="0">
-                        </div>
-                        <div class="mini-input-wrapper">
-                            <label id="ui-lbl-h1b">Benched:</label>
-                            <input type="number" id="p1-h1b" value="0">
-                        </div>
-                    </div>
-                    
-                    <div class="time-row-layout" style="margin-top: 10px;">
-                        <span class="half-title" id="ui-title-h2" style="min-width: 90px; margin: 0;">2nd Half:</span>
-                        <div class="mini-input-wrapper">
-                            <label id="ui-lbl-h2p">Played:</label>
-                            <input type="number" id="p1-h2p" value="0">
-                        </div>
-                        <div class="mini-input-wrapper">
-                            <label id="ui-lbl-h2b">Benched:</label>
-                            <input type="number" id="p1-h2b" value="0">
-                        </div>
-                    </div>
-                </div>
-
-                <p id="ui-lbl-perf-metrics" style="font-weight: bold; margin: 5px 0; font-size: 14px; color: #555;">Tracked Performance Metrics:</p>
-                <div id="dynamic-stat-zone">
-                    </div>
-
-                <div class="action-row">
-                    <button class="sms-btn" id="ui-btn-sms" onclick="shareDataLink('sms')">💬 Text Player Report</button>
-                    <button class="email-btn" id="ui-btn-email" onclick="shareDataLink('email')">✉️ Email Player Report</button>
                 </div>
             </div>
 
+            <p class="lang-en" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Tracked Performance Metrics:</p>
+            <p class="lang-es" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Métricas de Rendimiento Registradas:</p>
+            <p class="lang-ar" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">مقاييس الأداء المتتبعة:</p>
+            <p class="lang-hi" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">ट्रैक किए गए प्रदर्शन मेट्रिक्स:</p>
+            
+            <div id="dynamic-stat-zone"></div>
+
+            <div class="action-row">
+                <button class="sms-btn" onclick="shareDataLink('sms')">
+                    <span class="lang-en">💬 Text Player Report</span><span class="lang-es">💬 Texto Reporte</span><span class="lang-ar">💬 إرسال تقرير نصي</span><span class="lang-hi">💬 रिपोर्ट टेक्स्ट करें</span>
+                </button>
+                <button class="email-btn" onclick="shareDataLink('email')">
+                    <span class="lang-en">✉️ Email Player Report</span><span class="lang-es">✉️ Correo Reporte</span><span class="lang-ar">✉️ إرسال بريد إلكتروني</span><span class="lang-hi">✉️ रिपोर्ट ईमेल करें</span>
+                </button>
+            </div>
         </div>
 
-        <button class="master-btn" id="ui-btn-csv" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
+        <button class="master-btn" onclick="extractCSV()">
+            <span class="lang-en">📊 Export Stats to Spreadsheet (CSV)</span><span class="lang-es">📊 Exportar Estadísticas a CSV</span><span class="lang-ar">📊 تصدير البيانات إلى جدول (CSV)</span><span class="lang-hi">📊 स्प्रेडशीट पर एक्सपोर्ट करें (CSV)</span>
+        </button>
     </div>
 
     <script>
         var assignedMetricFields = [];
         var activeLanguageCode = "en";
 
-        // Multilingual Localization Storage Layout Dictionary Matrix
-        var dictionary = {
-            en: {
-                mainTitle: "⚽ Soccer Session Tracker",
-                sessionInfo: "1. Session Information",
-                game: "Game", scrimmage: "Scrimmage", practice: "Practice",
-                customMgr: "2. Custom Fields Manager",
-                createField: "Create Field",
-                metricPanel: "3. Active Roster Metric Panel",
-                playerConfig: "⚽ Player Identity Data Configuration",
-                pName: "Player Name:", pAge: "Age:", pPosition: "Player Position:", pNumber: "Player Number:",
-                h1: "1st Half:", h2: "2nd Half:", Played: "Played:", Benched: "Benched:",
-                perfMetrics: "Tracked Performance Metrics:",
-                txtPlayer: "💬 Text Player Report", emailPlayer: "✉️ Email Player Report",
-                exportCsv: "📊 Export Stats to Spreadsheet (CSV)",
-                descPlaceHolder: "Opponent Name / Notes",
-                fieldPlaceHolder: "Type metric (e.g. Goals, Miles Ran)",
-                alertNoName: "Please type a metric field name first!",
-                alertDup: "This metric field already exists below!",
-                confirmDel: "Are you sure you want to completely delete this metric field? All counted data for it will be removed.",
-                reportHeader: "📊 STAT REPORT",
-                deleteText: "Delete"
-            },
-            es: {
-                mainTitle: "⚽ Rastreador de Sesiones de Fútbol",
-                sessionInfo: "1. Información de la Sesión",
-                game: "Partido", scrimmage: "Interescuadras", practice: "Entrenamiento",
-                customMgr: "2. Gestor de Campos Personalizados",
-                createField: "Crear Campo",
-                metricPanel: "3. Panel de Métricas de la Plantilla Activa",
-                playerConfig: "⚽ Configuración de Datos de Identidad del Jugador",
-                pName: "Nombre del Jugador:", pAge: "Edad:", pPosition: "Posición del Jugador:", pNumber: "Número del Jugador:",
-                h1: "1er Tiempo:", h2: "2do Tiempo:", Played: "Jugado:", Benched: "Banca:",
-                perfMetrics: "Métricas de Rendimiento Registradas:",
-                txtPlayer: "💬 Enviar Reporte por Texto", emailPlayer: "✉️ Enviar Reporte por Correo",
-                exportCsv: "📊 Exportar Estadísticas a Hoja de Cálculo (CSV)",
-                descPlaceHolder: "Nombre del Rival / Notas",
-                fieldPlaceHolder: "Escribe la métrica (ej. Goles, Millas Corridas)",
-                alertNoName: "¡Por favor, escribe primero un nombre para la métrica!",
-                alertDup: "¡Este campo de métrica ya existe abajo!",
-                confirmDel: "¿Estás seguro de que quieres eliminar completamente este campo de métrica? Se borrarán todos los datos contados.",
-                reportHeader: "📊 REPORTE DE ESTADÍSTICAS",
-                deleteText: "Eliminar"
-            },
-            ar: {
-                mainTitle: "⚽ متتبع جلسات كرة القدم",
-                sessionInfo: "1. معلومات الجلسة",
-                game: "مباراة", scrimmage: "تقسيمة", practice: "تدريب",
-                customMgr: "2. مدير الحقول المخصصة",
-                createField: "إنشاء حقل",
-                metricPanel: "3. لوحة مقاييس قائمة اللاعبين النشطة",
-                playerConfig: "⚽ تكوين بيانات هوية اللاعب",
-                pName: "اسم اللاعب:", pAge: "العمر:", pPosition: "مركز اللاعب:", pNumber: "رقم اللاعب:",
-                h1: "الشوط الأول:", h2: "الشوط الثاني:", Played: "لعب:", Benched: "بديل:",
-                perfMetrics: "مقاييس الأداء المتتبعة:",
-                txtPlayer: "💬 إرسال تقرير نصي للاعب", emailPlayer: "✉️ إرسال تقرير بالبريد الإلكتروني",
-                exportCsv: "📊 تصدير البيانات إلى جدول (CSV)",
-                descPlaceHolder: "اسم الخصم / ملاحظات",
-                fieldPlaceHolder: "اكتب المقياس (مثل أهداف، الأميال المقطوعة)",
-                alertNoName: "يرجى كتابة اسم حقل المقياس أولاً!",
-                alertDup: "هذا الحقل موجود بالفعل أدناه!",
-                confirmDel: "هل أنت متأكد أنك تريد حذف هذا الحقل تمامًا؟ سيتم إزالة جميع البيانات المحسوبة له.",
-                reportHeader: "📊 تقرير الإحصائيات",
-                deleteText: "حذف"
-            },
-            hi: {
-                mainTitle: "⚽ सॉकर सेशन और स्टेट ट्रैकर",
-                sessionInfo: "1. सेशन की जानकारी",
-                game: "मैच", scrimmage: "अभ्यास मैच", practice: "प्रैक्टिस",
-                customMgr: "2. कस्टम फ़ील्ड मैनेजर",
-                createField: "फ़ील्ड बनाएं",
-                metricPanel: "3. एक्टिव रोस्टर मेट्रिक पैनल",
-                playerConfig: "⚽ खिलाड़ी पहचान डेटा कॉन्फ़िगरेशन",
-                pName: "खिलाड़ी का नाम:", pAge: "उम्र:", pPosition: "खिलाड़ी की पोजीशन:", pNumber: "खिलाड़ी का नंबर:",
-                h1: "पहला हाफ:", h2: "दूसरा हाफ:", Played: "खेला:", Benched: "बेंच पर:",
-                perfMetrics: "ट्रैक किए गए प्रदर्शन मेट्रिक्स:",
-                txtPlayer: "💬 खिलाड़ी रिपोर्ट टेक्स्ट करें", emailPlayer: "✉️ खिलाड़ी रिपोर्ट ईमेल करें",
-                exportCsv: "📊 स्प्रेडशीट पर एक्सपोर्ट करें (CSV)",
-                descPlaceHolder: "विपक्षी टीम का नाम / नोट्स",
-                fieldPlaceHolder: "मेट्रिक टाइप करें (जैसे गोल, दौड़े गए मील)",
-                alertNoName: "कृपया पहले मेट्रिक फ़ील्ड का नाम टाइप करें!",
-                alertDup: "यह मेट्रिक फ़ील्ड नीचे पहले से मौजूद है!",
-                confirmDel: "क्या आप वाकई इस मेट्रिक फ़ील्ड को पूरी तरह से हटाना चाहते हैं? इसके सभी गिने गए डेटा हटा दिए जाएंगे।",
-                reportHeader: "📊 स्टेट रिपोर्ट",
-                deleteText: "हटाएं"
-            }
-        };
-
         document.getElementById('m-date').valueAsDate = new Date();
 
-        function translateAppTo(langCode) {
+        // 1. Core Forceful Language Visibility Controller Engine
+        function swapLanguageDisplay(langCode) {
             activeLanguageCode = langCode;
-            
-            // Toggle active status UI indicators on top languages bar
-            document.querySelectorAll('.lang-btn').forEach(function(btn){
-                btn.classList.remove('active-lang');
-            });
-            document.getElementById('btn-lang-' + langCode).classList.add('active-lang');
 
-            // Handle RTL layout adjustment context explicitly for Arabic
-            var htmlNode = document.getElementById('main-html-tag');
-            if(langCode === 'ar') {
-                htmlNode.setAttribute('dir', 'rtl');
+            // Manage text direction styling for RTL compatibility
+            if (langCode === 'ar') {
+                document.body.style.direction = "rtl";
             } else {
-                htmlNode.setAttribute('dir', 'ltr');
+                document.body.style.direction = "ltr";
             }
 
-            // Map standard static UI translations from active dictionary selection
-            var localized = dictionary[langCode];
-            document.getElementById('ui-main-title').innerText = localized.mainTitle;
-            document.getElementById('ui-h3-session-info').innerText = localized.sessionInfo;
-            document.getElementById('ui-lbl-game').innerText = localized.game;
-            document.getElementById('ui-lbl-scrimmage').innerText = localized.scrimmage;
-            document.getElementById('ui-lbl-practice').innerText = localized.practice;
-            document.getElementById('ui-h3-custom-mgr').innerText = localized.customMgr;
-            document.getElementById('ui-btn-create-field').innerText = localized.createField;
-            document.getElementById('ui-h3-metric-panel').innerText = localized.metricPanel;
-            document.getElementById('ui-player-config-title').innerText = localized.playerConfig;
+            // Tab styling highlighting engine
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active-lang'));
+            document.getElementById('tab-' + langCode).classList.add('active-lang');
+
+            // Hard core UI physical display mask processor switches
+            var languageOptionsList = ['en', 'es', 'ar', 'hi'];
+            languageOptionsList.forEach(function(item) {
+                var matches = document.querySelectorAll('.lang-' + item);
+                matches.forEach(function(el) {
+                    if (item === langCode) {
+                        // Handle standard flex rows vs simple span items correctly
+                        if (el.tagName === 'INPUT' || el.tagName === 'SPAN' || el.tagName === 'LABEL') {
+                            el.style.display = "inline-block";
+                        } else {
+                            el.style.display = "block";
+                        }
+                    } else {
+                        el.style.display = "none";
+                    }
+                });
+            });
+        }
+
+        // 2. Custom Metric Field creation handler 
+        function generateMetricField() {
+            var activeInputBox = document.getElementById('cf-input-' + activeLanguageCode);
+            var rawName = activeInputBox.value.trim();
             
-            document.getElementById('ui-lbl-pname').innerText = localized.pName;
-            document.getElementById('ui-lbl-page').innerText = localized.pAge;
-            document.getElementById('ui-lbl-pposition').innerText = localized.pPosition;
-            document.getElementById('ui-lbl-pnumber').innerText = localized.pNumber;
+            if (!rawName) {
+                alert(activeLanguageCode === 'es' ? "¡Por favor, escribe primero un nombre!" : activeLanguageCode === 'ar' ? "يرجى كتابة اسم أولاً" : activeLanguageCode === 'hi' ? "कृपया नाम टाइप करें!" : "Please type a metric field name first!");
+                return;
+            }
+
+            var elementIdSafe = "metric-" + Date.now(); // Always uniquely generated to bypass layout memory cache locks
+
+            var fieldObject = { id: elementIdSafe, labelName: rawName };
+            assignedMetricFields.push(fieldObject);
+
+            var wrapperRow = document.createElement('div');
+            wrapperRow.className = "stat-wrapper-row";
+            wrapperRow.id = "wrap-" + elementIdSafe;
+
+            // Direct inner label configurations with universal cross language tracking actions
+            var deleteWord = activeLanguageCode === 'es' ? "Eliminar" : activeLanguageCode === 'ar' ? "حذف" : activeLanguageCode === 'hi' ? "हटाएं" : "Delete";
+
+            wrapperRow.innerHTML = `
+                <span class="stat-label-title">${rawName}:</span>
+                <span class="count-num" id="val-${elementIdSafe}">0</span>
+                <button class="plus-btn" onclick="incrementStat('${elementIdSafe}')">+1</button>
+                <button class="trash-btn" onclick="destroyMetricField('${elementIdSafe}')">${deleteWord}</button>
+            `;
+
+            document.getElementById('dynamic-stat-zone').appendChild(wrapperRow);
             
-            document.getElementById('ui-title-h1').innerText = localized.h1;
-            document.getElementById('ui-lbl-h1p').innerText = localized.Played;
-            document.getElementById('ui-lbl-h1b').innerText = localized.Benched;
-            
-            document.getElementById('ui-title-h2').innerText = localized.h2;
-            document.getElementById('ui-lbl-h2p').innerText = localized.Played;
-            document.getElementById('ui-lbl-h2b').innerText = localized.Benched;
-            
-            document.getElementById('ui-lbl-perf-metrics').innerText = localized.perfMetrics;
-            document.getElementById('ui-btn-sms').innerText = localized.txtPlayer;
-            document.getElementById('ui-btn-email').innerText = localized.emailPlayer;
-            document.getElementById('ui-btn-csv').innerText = localized.exportCsv;
-            
-            // Set dynamic text attributes inside fields placeholders
-            document.getElementById('m-desc').setAttribute('placeholder', localized.descPlaceHolder);
-            document.getElem
+            // Clear out all input forms
+            document.getElementById('cf-input-en').value = "";
+            document.getElementById('cf-input-es').value = "";
+            document.getElementById('cf-input-ar').value = "";
+            document.getElementById('cf-input-hi').value = "";
+        }
+
+        function incrementStat(targetId) {
+            var counterNode = document.getElementById("val-" + targetId);
+            var parsedVal = parseInt(counterNode.innerText) || 0;
+            counterNode.innerText = parsedVal + 1;
+        }
+
+        function destroyMetricField(targetId) {
+            var confMsg = activeLanguageCode === 'es' ? "¿Eliminar?" : activeLanguageCode === 'ar' ? "هل تريد الحذف؟" : activeLanguageCode === 'hi' ? "हटाएं?" : "Delete?";
+            if (confirm(confMsg)) {
+                var targetRowElement = document.getElementById("wrap-" + targetId);
+                if (targetRowElement) { targetRowElement.remove(); }
+                assignedMetricFields = assignedMetricFields.filter(item => item.id !== targetId);
+            }
+        }
+
+        function getSessionType() {
+            if(docu
