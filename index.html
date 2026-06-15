@@ -104,12 +104,11 @@
         }
         .time-row-layout:last-child { margin-bottom: 0; }
         
-        /* 20% Dimension Expansion Rules applied directly to input wrappers */
         .mini-input-wrapper {
             display: flex;
             align-items: center;
             gap: 8px;
-            max-width: 30%; /* Expanded from 25% to provide 20% additional scaling */
+            max-width: 30%; 
         }
         .mini-input-wrapper label {
             font-size: 13px;
@@ -117,8 +116,8 @@
             white-space: nowrap;
         }
         .mini-input-wrapper input {
-            padding: 9px; /* Increased padding inside input box layers */
-            font-size: 16px; /* Larger typography for cleaner interactive engagement */
+            padding: 9px; 
+            font-size: 16px; 
             text-align: center;
         }
         
@@ -158,10 +157,11 @@
             display: flex;
             gap: 8px;
             margin-top: 20px;
+            margin-bottom: 10px;
         }
         .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 12px; width: auto; }
         .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 12px; width: auto; }
-        .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-top: 10px; }
+        .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -252,4 +252,26 @@
                 </div>
             </div>
 
-            <p style="font-weight:bold; margin
+            <p style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Tracked Performance Metrics:</p>
+            <div id="dynamic-stat-zone"></div>
+
+            <div class="action-row">
+                <button class="sms-btn" onclick="shareDataLink('sms')">💬 Text Player Report</button>
+                <button class="email-btn" onclick="shareDataLink('email')">✉️ Email Player Report</button>
+            </div>
+            <button class="master-btn" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
+        </div>
+    </div>
+
+    <script>
+        var assignedMetricFields = [];
+
+        document.getElementById('m-date').valueAsDate = new Date();
+
+        function generateMetricField() {
+            var inputNode = document.getElementById('custom-field-input');
+            var rawName = inputNode.value.trim();
+            
+            if (!rawName) {
+                alert("Please type a metric field name first!");
+                return;
