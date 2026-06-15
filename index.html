@@ -23,36 +23,6 @@
         }
         h1, h3 { text-align: center; color: var(--secondary); margin: 5px 0 15px 0; }
         
-        /* Language Selection Controls bar layout */
-        .lang-bar {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            background: #e0e0e0;
-            padding: 8px;
-            border-radius: 8px;
-        }
-        .lang-btn {
-            padding: 8px 14px;
-            font-size: 14px;
-            background-color: #fff;
-            color: var(--dark);
-            border: 1px solid #bbb;
-            width: auto;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .lang-btn.active-lang {
-            background-color: var(--secondary);
-            color: #fff;
-            border-color: var(--secondary);
-        }
-
-        /* Language Visibility System Toggles */
-        .lang-es, .lang-ar, .lang-hi { display: none; }
-
         .card {
             background: white;
             padding: 15px;
@@ -113,39 +83,42 @@
             margin-bottom: 15px;
         }
         
+        /* Expanded Time Container Layout */
         .time-box-container {
             background: #edf7ed;
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
         }
         .half-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: bold;
             color: var(--secondary);
             margin: 0;
         }
         .time-row-layout {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
         .time-row-layout:last-child { margin-bottom: 0; }
+        
+        /* 20% Dimension Expansion Rules applied directly to input wrappers */
         .mini-input-wrapper {
             display: flex;
             align-items: center;
-            gap: 6px;
-            max-width: 25%;
+            gap: 8px;
+            max-width: 30%; /* Expanded from 25% to provide 20% additional scaling */
         }
         .mini-input-wrapper label {
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: bold;
             white-space: nowrap;
         }
         .mini-input-wrapper input {
-            padding: 6px;
-            font-size: 14px;
+            padding: 9px; /* Increased padding inside input box layers */
+            font-size: 16px; /* Larger typography for cleaner interactive engagement */
             text-align: center;
         }
         
@@ -193,245 +166,90 @@
 </head>
 <body>
 
-    <div class="lang-bar">
-        <button class="lang-btn active-lang" id="tab-en" onclick="swapLanguageDisplay('en')">English</button>
-        <button class="lang-btn" id="tab-es" onclick="swapLanguageDisplay('es')">Español</button>
-        <button class="lang-btn" id="tab-ar" onclick="swapLanguageDisplay('ar')">العربية</button>
-        <button class="lang-btn" id="tab-hi" onclick="swapLanguageDisplay('hi')">हिन्दी</button>
-    </div>
-
-    <h1 class="lang-en">⚽ Soccer Session Tracker</h1>
-    <h1 class="lang-es">⚽ Rastreador de Sesión de Fútbol</h1>
-    <h1 class="lang-ar">⚽ متتبع جلسات كرة القدم</h1>
-    <h1 class="lang-hi">⚽ सॉकर सेशन और स्टेट ट्रैकर</h1>
+    <h1>⚽ Soccer Session Tracker</h1>
 
     <div class="card">
-        <h3 class="lang-en">1. Session Information</h3>
-        <h3 class="lang-es">1. Información de la Sesión</h3>
-        <h3 class="lang-ar">1. معلومات الجلسة</h3>
-        <h3 class="lang-hi">1. सेशन की जानकारी</h3>
-
+        <h3>1. Session Information</h3>
         <div class="checkbox-group">
             <label style="display:flex; align-items:center; gap:5px;">
                 <input type="radio" name="stype" id="p-game" style="width:auto;">
-                <span class="lang-en">Game</span><span class="lang-es">Partido</span><span class="lang-ar">مباراة</span><span class="lang-hi">मैच</span>
+                <span>Game</span>
             </label>
             <label style="display:flex; align-items:center; gap:5px;">
                 <input type="radio" name="stype" id="p-scrimmage" style="width:auto;">
-                <span class="lang-en">Scrimmage</span><span class="lang-es">Interescuadras</span><span class="lang-ar">تقسيمة</span><span class="lang-hi">अभ्यास मैच</span>
+                <span>Scrimmage</span>
             </label>
             <label style="display:flex; align-items:center; gap:5px;">
                 <input type="radio" name="stype" id="p-practice" checked style="width:auto;">
-                <span class="lang-en">Practice</span><span class="lang-es">Entrenamiento</span><span class="lang-ar">تدريب</span><span class="lang-hi">प्रैक्टिस</span>
+                <span>Practice</span>
             </label>
         </div>
         <div class="form-row">
             <input type="date" id="m-date">
-            <input type="text" id="m-desc-en" class="lang-en" placeholder="Opponent Name / Notes">
-            <input type="text" id="m-desc-es" class="lang-es" placeholder="Nombre del Rival / Notas">
-            <input type="text" id="m-desc-ar" class="lang-ar" placeholder="اسم الخصم / ملاحظات">
-            <input type="text" id="m-desc-hi" class="lang-hi" placeholder="विपक्षी टीम का नाम / नोट्स">
+            <input type="text" id="m-desc" placeholder="Opponent Name / Notes">
         </div>
     </div>
 
     <div class="card">
-        <h3 class="lang-en">2. Custom Fields Manager</h3>
-        <h3 class="lang-es">2. Gestor de Campos Personalizados</h3>
-        <h3 class="lang-ar">2. مدير الحقول المخصصة</h3>
-        <h3 class="lang-hi">2. कस्टम फ़ील्ड मैनेजर</h3>
-
+        <h3>2. Custom Fields Manager</h3>
         <div class="form-row">
-            <input type="text" id="cf-input-en" class="lang-en" placeholder="Type metric (e.g. Goals, Miles Ran)">
-            <input type="text" id="cf-input-es" class="lang-es" placeholder="Escribe la métrica (ej. Goles, Millas)">
-            <input type="text" id="cf-input-ar" class="lang-ar" placeholder="اكتب المقياس (مثل أهداف، الأميال)">
-            <input type="text" id="cf-input-hi" class="lang-hi" placeholder="मेट्रिक टाइप करें (जैसे गोल, दौड़े गए मील)">
-
-            <button style="background-color: var(--accent); width:auto; white-space:nowrap;" onclick="generateMetricField()">
-                <span class="lang-en">Create Field</span><span class="lang-es">Crear Campo</span><span class="lang-ar">إنشاء حقل</span><span class="lang-hi">फ़ील्ड बनाएं</span>
-            </button>
+            <input type="text" id="custom-field-input" placeholder="Type metric (e.g. Goals, Miles Ran, Assists)">
+            <button style="background-color: var(--accent); width:auto; white-space:nowrap;" onclick="generateMetricField()">Create Field</button>
         </div>
     </div>
 
     <div class="card">
-        <h3 class="lang-en">3. Active Roster Metric Panel</h3>
-        <h3 class="lang-es">3. Panel de Métricas de la Plantilla</h3>
-        <h3 class="lang-ar">3. لوحة مقاييس قائمة اللاعبين النشطة</h3>
-        <h3 class="lang-hi">3. एक्टिव रोस्टर मेट्रिक पैनल</h3>
+        <h3>3. Active Roster Metric Panel</h3>
 
         <div class="player-entry">
-            <div class="player-header lang-en">⚽ Player Identity Data Configuration</div>
-            <div class="player-header lang-es">⚽ Configuración de Identidad del Jugador</div>
-            <div class="player-header lang-ar">⚽ تكوين بيانات هوية اللاعب</div>
-            <div class="player-header lang-hi">⚽ खिलाड़ी पहचान डेटा कॉन्फ़िगरेशन</div>
+            <div class="player-header">⚽ Player Identity Data Configuration</div>
             
             <div class="form-row">
                 <div class="label-group" style="flex: 3;">
-                    <label class="lang-en">Player Name:</label><label class="lang-es">Nombre del Jugador:</label><label class="lang-ar">اسم اللاعب:</label><label class="lang-hi">खिलाड़ी का नाम:</label>
-                    <input type="text" id="p1-name" value="Striker One">
+                    <label>Player Name:</label>
+                    <input type="text" id="p1-name" placeholder="Enter full name" value="Striker One">
                 </div>
                 <div class="label-group" style="flex: 1;">
-                    <label class="lang-en">Age:</label><label class="lang-es">Edad:</label><label class="lang-ar">العمر:</label><label class="lang-hi">उम्र:</label>
-                    <input type="number" id="p1-age" value="12">
+                    <label>Age:</label>
+                    <input type="number" id="p1-age" placeholder="Age" value="12">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="label-group" style="flex: 3;">
-                    <label class="lang-en">Player Position:</label><label class="lang-es">Posición del Jugador:</label><label class="lang-ar">مركز اللاعب:</label><label class="lang-hi">खिलाड़ी की पोजीशन:</label>
-                    <input type="text" id="p1-position" value="Forward">
+                    <label>Player Position:</label>
+                    <input type="text" id="p1-position" placeholder="e.g. Midfielder, Forward" value="Forward">
                 </div>
                 <div class="label-group" style="flex: 1;">
-                    <label class="lang-en">Player Number:</label><label class="lang-es">Número:</label><label class="lang-ar">رقم اللاعب:</label><label class="lang-hi">खिलाड़ी नंबर:</label>
-                    <input type="text" id="p1-jersey" value="9">
+                    <label>Player Number:</label>
+                    <input type="text" id="p1-jersey" placeholder="#" value="9">
                 </div>
             </div>
             
             <div class="time-box-container" style="margin-top:15px;">
                 <div class="time-row-layout">
-                    <span class="half-title lang-en" style="min-width:90px;">1st Half:</span>
-                    <span class="half-title lang-es" style="min-width:90px;">1er Tiempo:</span>
-                    <span class="half-title lang-ar" style="min-width:90px;">الشوط الأول:</span>
-                    <span class="half-title lang-hi" style="min-width:90px;">पहला हाफ:</span>
+                    <span class="half-title" style="min-width:90px;">1st Half:</span>
                     <div class="mini-input-wrapper">
-                        <label class="lang-en">Played:</label><label class="lang-es">Jugado:</label><label class="lang-ar">لعب:</label><label class="lang-hi">खेला:</label>
+                        <label>Played:</label>
                         <input type="number" id="p1-h1p" value="0">
                     </div>
                     <div class="mini-input-wrapper">
-                        <label class="lang-en">Benched:</label><label class="lang-es">Banca:</label><label class="lang-ar">بديل:</label><label class="lang-hi">बेंच:</label>
+                        <label>Benched:</label>
                         <input type="number" id="p1-h1b" value="0">
                     </div>
                 </div>
                 
-                <div class="time-row-layout" style="margin-top: 10px;">
-                    <span class="half-title lang-en" style="min-width:90px;">2nd Half:</span>
-                    <span class="half-title lang-es" style="min-width:90px;">2do Tiempo:</span>
-                    <span class="half-title lang-ar" style="min-width:90px;">الشوط الثاني:</span>
-                    <span class="half-title lang-hi" style="min-width:90px;">दूसरा हाफ:</span>
+                <div class="time-row-layout" style="margin-top: 12px;">
+                    <span class="half-title" style="min-width:90px;">2nd Half:</span>
                     <div class="mini-input-wrapper">
-                        <label class="lang-en">Played:</label><label class="lang-es">Jugado:</label><label class="lang-ar">لعب:</label><label class="lang-hi">खेला:</label>
+                        <label>Played:</label>
                         <input type="number" id="p1-h2p" value="0">
                     </div>
                     <div class="mini-input-wrapper">
-                        <label class="lang-en">Benched:</label><label class="lang-es">Banca:</label><label class="lang-ar">بديل:</label><label class="lang-hi">बेंच:</label>
+                        <label>Benched:</label>
                         <input type="number" id="p1-h2b" value="0">
                     </div>
                 </div>
             </div>
 
-            <p class="lang-en" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Tracked Performance Metrics:</p>
-            <p class="lang-es" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Métricas de Rendimiento Registradas:</p>
-            <p class="lang-ar" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">مقاييس الأداء المتتبعة:</p>
-            <p class="lang-hi" style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">ट्रैक किए गए प्रदर्शन मेट्रिक्स:</p>
-            
-            <div id="dynamic-stat-zone"></div>
-
-            <div class="action-row">
-                <button class="sms-btn" onclick="shareDataLink('sms')">
-                    <span class="lang-en">💬 Text Player Report</span><span class="lang-es">💬 Texto Reporte</span><span class="lang-ar">💬 إرسال تقرير نصي</span><span class="lang-hi">💬 रिपोर्ट टेक्स्ट करें</span>
-                </button>
-                <button class="email-btn" onclick="shareDataLink('email')">
-                    <span class="lang-en">✉️ Email Player Report</span><span class="lang-es">✉️ Correo Reporte</span><span class="lang-ar">✉️ إرسال بريد إلكتروني</span><span class="lang-hi">✉️ रिपोर्ट ईमेल करें</span>
-                </button>
-            </div>
-        </div>
-
-        <button class="master-btn" onclick="extractCSV()">
-            <span class="lang-en">📊 Export Stats to Spreadsheet (CSV)</span><span class="lang-es">📊 Exportar Estadísticas a CSV</span><span class="lang-ar">📊 تصدير البيانات إلى جدول (CSV)</span><span class="lang-hi">📊 स्प्रेडशीट पर एक्सपोर्ट करें (CSV)</span>
-        </button>
-    </div>
-
-    <script>
-        var assignedMetricFields = [];
-        var activeLanguageCode = "en";
-
-        document.getElementById('m-date').valueAsDate = new Date();
-
-        // 1. Core Forceful Language Visibility Controller Engine
-        function swapLanguageDisplay(langCode) {
-            activeLanguageCode = langCode;
-
-            // Manage text direction styling for RTL compatibility
-            if (langCode === 'ar') {
-                document.body.style.direction = "rtl";
-            } else {
-                document.body.style.direction = "ltr";
-            }
-
-            // Tab styling highlighting engine
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active-lang'));
-            document.getElementById('tab-' + langCode).classList.add('active-lang');
-
-            // Hard core UI physical display mask processor switches
-            var languageOptionsList = ['en', 'es', 'ar', 'hi'];
-            languageOptionsList.forEach(function(item) {
-                var matches = document.querySelectorAll('.lang-' + item);
-                matches.forEach(function(el) {
-                    if (item === langCode) {
-                        // Handle standard flex rows vs simple span items correctly
-                        if (el.tagName === 'INPUT' || el.tagName === 'SPAN' || el.tagName === 'LABEL') {
-                            el.style.display = "inline-block";
-                        } else {
-                            el.style.display = "block";
-                        }
-                    } else {
-                        el.style.display = "none";
-                    }
-                });
-            });
-        }
-
-        // 2. Custom Metric Field creation handler 
-        function generateMetricField() {
-            var activeInputBox = document.getElementById('cf-input-' + activeLanguageCode);
-            var rawName = activeInputBox.value.trim();
-            
-            if (!rawName) {
-                alert(activeLanguageCode === 'es' ? "¡Por favor, escribe primero un nombre!" : activeLanguageCode === 'ar' ? "يرجى كتابة اسم أولاً" : activeLanguageCode === 'hi' ? "कृपया नाम टाइप करें!" : "Please type a metric field name first!");
-                return;
-            }
-
-            var elementIdSafe = "metric-" + Date.now(); // Always uniquely generated to bypass layout memory cache locks
-
-            var fieldObject = { id: elementIdSafe, labelName: rawName };
-            assignedMetricFields.push(fieldObject);
-
-            var wrapperRow = document.createElement('div');
-            wrapperRow.className = "stat-wrapper-row";
-            wrapperRow.id = "wrap-" + elementIdSafe;
-
-            // Direct inner label configurations with universal cross language tracking actions
-            var deleteWord = activeLanguageCode === 'es' ? "Eliminar" : activeLanguageCode === 'ar' ? "حذف" : activeLanguageCode === 'hi' ? "हटाएं" : "Delete";
-
-            wrapperRow.innerHTML = `
-                <span class="stat-label-title">${rawName}:</span>
-                <span class="count-num" id="val-${elementIdSafe}">0</span>
-                <button class="plus-btn" onclick="incrementStat('${elementIdSafe}')">+1</button>
-                <button class="trash-btn" onclick="destroyMetricField('${elementIdSafe}')">${deleteWord}</button>
-            `;
-
-            document.getElementById('dynamic-stat-zone').appendChild(wrapperRow);
-            
-            // Clear out all input forms
-            document.getElementById('cf-input-en').value = "";
-            document.getElementById('cf-input-es').value = "";
-            document.getElementById('cf-input-ar').value = "";
-            document.getElementById('cf-input-hi').value = "";
-        }
-
-        function incrementStat(targetId) {
-            var counterNode = document.getElementById("val-" + targetId);
-            var parsedVal = parseInt(counterNode.innerText) || 0;
-            counterNode.innerText = parsedVal + 1;
-        }
-
-        function destroyMetricField(targetId) {
-            var confMsg = activeLanguageCode === 'es' ? "¿Eliminar?" : activeLanguageCode === 'ar' ? "هل تريد الحذف؟" : activeLanguageCode === 'hi' ? "हटाएं?" : "Delete?";
-            if (confirm(confMsg)) {
-                var targetRowElement = document.getElementById("wrap-" + targetId);
-                if (targetRowElement) { targetRowElement.remove(); }
-                assignedMetricFields = assignedMetricFields.filter(item => item.id !== targetId);
-            }
-        }
-
-        function getSessionType() {
-            if(docu
+            <p style="font-weight:bold; margin
