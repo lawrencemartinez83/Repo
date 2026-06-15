@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Soccer Tracker</title>
+    <title>Soccer Session Tracker</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
@@ -57,6 +57,10 @@
         .stat-name { font-weight: bold; font-size: 14px; }
         .num-input { width: 65px; text-align: center; padding: 6px; font-size: 15px; }
         
+        .custom-row {
+            background-color: #e3f2fd;
+        }
+        
         button {
             padding: 12px;
             font-size: 15px;
@@ -68,6 +72,8 @@
             width: 100%;
             margin-bottom: 8px;
         }
+        .btn-add { background-color: #0288d1; margin-bottom: 0; }
+        .btn-delete { background-color: #d32f2f; padding: 6px 10px; width: auto; font-size: 13px; margin-bottom: 0; }
         .btn-save { background-color: #ff9800; }
         .btn-csv { background-color: #157f43; }
         .btn-clear { background-color: #757575; margin-bottom: 0; }
@@ -92,9 +98,13 @@
 
     <div class="box">
         <div class="row">
-            <div class="col" style="flex: 3;">
+            <div class="col" style="flex: 2;">
                 <label>Player Name:</label>
                 <input type="text" id="p-name" placeholder="Name">
+            </div>
+            <div class="col" style="flex: 1;">
+                <label>Age:</label>
+                <input type="number" id="p-age" placeholder="Age">
             </div>
             <div class="col" style="flex: 1;">
                 <label>Jersey #:</label>
@@ -104,48 +114,53 @@
     </div>
 
     <div class="box">
+        <label>Add Dynamic Custom Skill Trackers:</label>
+        <div class="row" style="margin-top: 4px;">
+            <input type="text" id="new-skill-name" placeholder="e.g. Header Wins, Steals, Crosses" style="flex: 2;">
+            <button class="btn-add" onclick="addCustomSkillRow()" style="flex: 1;">Add Skill</button>
+        </div>
+    </div>
+
+    <div class="box">
         <table>
             <tr>
                 <td class="stat-name" style="color: #1b5e20;">1st Half Played Min:</td>
                 <td><input type="number" id="m-h1p" class="num-input" value="0"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="stat-name" style="color: #1b5e20;">1st Half Bench Min:</td>
                 <td><input type="number" id="m-h1b" class="num-input" value="0"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="stat-name" style="color: #1b5e20;">2nd Half Played Min:</td>
                 <td><input type="number" id="m-h2p" class="num-input" value="0"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="stat-name" style="color: #1b5e20;">2nd Half Bench Min:</td>
                 <td><input type="number" id="m-h2b" class="num-input" value="0"></td>
+                <td></td>
             </tr>
             
             <tr>
                 <td class="stat-name">Goals scored:</td>
                 <td><input type="number" id="s-goals" class="num-input" value="0"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="stat-name">Assists:</td>
                 <td><input type="number" id="s-assists" class="num-input" value="0"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="stat-name">Shots on Goal:</td>
                 <td><input type="number" id="s-shots" class="num-input" value="0"></td>
+                <td></td>
             </tr>
-            <tr>
-                <td class="stat-name">Steals / Tackles:</td>
-                <td><input type="number" id="s-steals" class="num-input" value="0"></td>
-            </tr>
-            <tr>
-                <td class="stat-name">Saves:</td>
-                <td><input type="number" id="s-saves" class="num-input" value="0"></td>
-            </tr>
-            <tr>
-                <td class="stat-name">Fouls committed:</td>
-                <td><input type="number" id="s-fouls" class="num-input" value="0"></td>
-            </tr>
+
+            <tbody id="custom-skills-tbody"></tbody>
         </table>
     </div>
 
@@ -156,14 +171,17 @@
     </div>
 
     <script>
-        // Set up the default date immediately on load
+        // Track unique custom skill identifiers in an active registry array list
+        var registeredCustomSkills = [];
+
         window.onload = function() {
-            var saved = localStorage.getItem("soccer_simple_backup");
+            var saved = localStorage.getItem("soccer_tracker_pro_backup");
             if (saved) {
                 var data = JSON.parse(saved);
                 document.getElementById('m-date').value = data.date || "";
                 document.getElementById('m-desc').value = data.desc || "";
                 document.getElementById('p-name').value = data.name || "";
+                document.getElementById('p-age').value = data.age || "";
                 document.getElementById('p-jersey').value = data.jersey || "";
                 document.getElementById('m-h1p').value = data.h1p || "0";
                 document.getElementById('m-h1b').value = data.h1b || "0";
@@ -172,19 +190,62 @@
                 document.getElementById('s-goals').value = data.goals || "0";
                 document.getElementById('s-assists').value = data.assists || "0";
                 document.getElementById('s-shots').value = data.shots || "0";
-                document.getElementById('s-steals').value = data.steals || "0";
-                document.getElementById('s-saves').value = data.saves || "0";
-                document.getElementById('s-fouls').value = data.fouls || "0";
+
+                // Map clean elements and input data lines out from cold storage blocks
+                if (data.customSkillsList) {
+                    data.customSkillsList.forEach(function(skill) {
+                        buildSkillTableRowElement(skill.id, skill.name, skill.value);
+                    });
+                }
             } else {
                 document.getElementById('m-date').valueAsDate = new Date();
             }
         };
+
+        function addCustomSkillRow() {
+            var inputField = document.getElementById('new-skill-name');
+            var nameString = inputField.value.trim();
+            if (!nameString) return;
+
+            // Generate clean isolated string keys using current unix timestamp tags
+            var generatedKeyId = "skill-" + Date.now();
+            buildSkillTableRowElement(generatedKeyId, nameString, 0);
+            
+            inputField.value = "";
+        }
+
+        function buildSkillTableRowElement(id, name, value) {
+            registeredCustomSkills.push({ id: id, name: name });
+
+            var tableContainerBody = document.getElementById('custom-skills-tbody');
+            var trRowNode = document.createElement('tr');
+            trRowNode.id = "row-container-" + id;
+            trRowNode.className = "custom-row";
+            
+            trRowNode.innerHTML = `
+                <td class="stat-name" style="padding-left: 6px;">${name}:</td>
+                <td><input type="number" id="input-node-${id}" class="num-input" value="${value}"></td>
+                <td style="text-align: right; padding-right: 6px;">
+                    <button class="btn-delete" onclick="removeSkillTableRowElement('${id}')">X</button>
+                </td>
+            `;
+            tableContainerBody.appendChild(trRowNode);
+        }
+
+        function removeSkillTableRowElement(id) {
+            var rowNode = document.getElementById("row-container-" + id);
+            if (rowNode) rowNode.remove();
+            
+            // Clean target out of the memory execution thread array maps
+            registeredCustomSkills = registeredCustomSkills.filter(item => item.id !== id);
+        }
 
         function saveData() {
             var state = {
                 date: document.getElementById('m-date').value,
                 desc: document.getElementById('m-desc').value,
                 name: document.getElementById('p-name').value,
+                age: document.getElementById('p-age').value,
                 jersey: document.getElementById('p-jersey').value,
                 h1p: document.getElementById('m-h1p').value,
                 h1b: document.getElementById('m-h1b').value,
@@ -193,11 +254,17 @@
                 goals: document.getElementById('s-goals').value,
                 assists: document.getElementById('s-assists').value,
                 shots: document.getElementById('s-shots').value,
-                steals: document.getElementById('s-steals').value,
-                saves: document.getElementById('s-saves').value,
-                fouls: document.getElementById('s-fouls').value
+                customSkillsList: registeredCustomSkills.map(function(skill) {
+                    var inputElement = document.getElementById("input-node-" + skill.id);
+                    return {
+                        id: skill.id,
+                        name: skill.name,
+                        value: inputElement ? inputElement.value : "0"
+                    };
+                })
             };
-            localStorage.setItem("soccer_simple_backup", JSON.stringify(state));
+            
+            localStorage.setItem("soccer_tracker_pro_backup", JSON.stringify(state));
             alert("Saved to phone hardware memory!");
         }
 
@@ -205,28 +272,33 @@
             var date = document.getElementById('m-date').value || "";
             var desc = document.getElementById('m-desc').value || "";
             var name = document.getElementById('p-name').value || "Player";
+            var age = document.getElementById('p-age').value || "";
             var jersey = document.getElementById('p-jersey').value || "";
             
-            var headers = ["Date", "Description", "Player Name", "Jersey", "H1 Played", "H1 Bench", "H2 Played", "H2 Bench", "Goals", "Assists", "Shots", "Steals", "Saves", "Fouls"];
-            var values = [
-                date, desc, name, jersey,
+            var csvHeaders = ["Date", "Description", "Player Name", "Age", "Jersey", "H1 Played", "H1 Bench", "H2 Played", "H2 Bench", "Goals", "Assists", "Shots"];
+            var csvValues = [
+                date, desc, name, age, jersey,
                 document.getElementById('m-h1p').value,
                 document.getElementById('m-h1b').value,
                 document.getElementById('m-h2p').value,
                 document.getElementById('m-h2b').value,
                 document.getElementById('s-goals').value,
                 document.getElementById('s-assists').value,
-                document.getElementById('s-shots').value,
-                document.getElementById('s-steals').value,
-                document.getElementById('s-saves').value,
-                document.getElementById('s-fouls').value
+                document.getElementById('s-shots').value
             ];
 
-            var csvContent = headers.join(",") + "\n" + values.join(",");
+            // Safely append custom field headers and values sequentially into array arrays
+            registeredCustomSkills.forEach(function(skill) {
+                csvHeaders.push(skill.name);
+                var inputElement = document.getElementById("input-node-" + skill.id);
+                csvValues.push(inputElement ? inputElement.value : "0");
+            });
+
+            var csvContent = csvHeaders.join(",") + "\n" + csvValues.join(",");
             var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             var link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "soccer_stats_" + name.toLowerCase().replace(/[^a-z0-9]/g, "_") + ".csv";
+            link.download = "stats_" + name.toLowerCase().replace(/[^a-z0-9]/g, "_") + ".csv";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -234,9 +306,10 @@
 
         function clearData() {
             if (confirm("Clear form and completely delete phone memory backup?")) {
-                localStorage.removeItem("soccer_simple_backup");
+                localStorage.removeItem("soccer_tracker_pro_backup");
                 document.getElementById('m-desc').value = "";
                 document.getElementById('p-name').value = "";
+                document.getElementById('p-age').value = "";
                 document.getElementById('p-jersey').value = "";
                 document.getElementById('m-h1p').value = "0";
                 document.getElementById('m-h1b').value = "0";
@@ -245,10 +318,9 @@
                 document.getElementById('s-goals').value = "0";
                 document.getElementById('s-assists').value = "0";
                 document.getElementById('s-shots').value = "0";
-                document.getElementById('s-steals').value = "0";
-                document.getElementById('s-saves').value = "0";
-                document.getElementById('s-fouls').value = "0";
+                document.getElementById('custom-skills-tbody').innerHTML = "";
                 document.getElementById('m-date').valueAsDate = new Date();
+                registeredCustomSkills = [];
             }
         }
     </script>
