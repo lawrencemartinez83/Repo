@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="main-html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +22,32 @@
             color: var(--dark);
         }
         h1, h3 { text-align: center; color: var(--secondary); margin: 5px 0 15px 0; }
+        
+        /* Language Picker Row Style Layout */
+        .lang-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            background: #e0e0e0;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .lang-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            background-color: #fff;
+            color: var(--dark);
+            border: 1px solid #bbb;
+            width: auto;
+            border-radius: 4px;
+        }
+        .lang-btn.active-lang {
+            background-color: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+        }
+
         .card {
             background: white;
             padding: 15px;
@@ -41,14 +67,27 @@
             padding: 10px 0;
             font-weight: bold;
         }
+        .label-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 0;
+        }
+        .label-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--dark);
+        }
         input, button {
             padding: 12px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
+            width: 100%;
         }
-        input[type="text"], input[type="date"], input[type="number"] { flex: 1; min-width: 0; }
+        input[type="text"], input[type="date"], input[type="number"] { min-width: 0; }
         
         button {
             background-color: var(--primary);
@@ -66,29 +105,46 @@
             font-weight: bold;
             font-size: 18px;
             color: var(--secondary);
-            margin-bottom: 10px;
-        }
-        .time-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            background: #edf7ed;
-            padding: 10px;
-            border-radius: 5px;
             margin-bottom: 15px;
         }
-        .time-col {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        
+        .time-box-container {
+            background: #edf7ed;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
-        .time-col label {
-            font-size: 11px;
+        .half-title {
+            font-size: 13px;
             font-weight: bold;
             color: var(--secondary);
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+        }
+        .time-row-layout {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .time-row-layout:last-child { margin-bottom: 0; }
+        .mini-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            max-width: 25%;
+        }
+        .mini-input-wrapper label {
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .mini-input-wrapper input {
+            padding: 6px;
+            font-size: 14px;
+            text-align: center;
         }
         
-        /* Metric Sandbox Container */
         #dynamic-stat-zone {
             display: flex;
             flex-direction: column;
@@ -118,29 +174,36 @@
             min-width: 35px;
             text-align: center;
         }
-        .plus-btn { background-color: var(--accent); padding: 8px 15px; font-size: 14px; }
-        .trash-btn { background-color: var(--danger); padding: 8px 12px; font-size: 13px; }
+        .plus-btn { background-color: var(--accent); padding: 8px 15px; font-size: 14px; width: auto; }
+        .trash-btn { background-color: var(--danger); padding: 8px 12px; font-size: 13px; width: auto; }
         
         .action-row {
             display: flex;
             gap: 8px;
             margin-top: 20px;
         }
-        .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 12px; }
-        .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 12px; }
+        .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 12px; width: auto; }
+        .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 12px; width: auto; }
         .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <h1>⚽ Soccer Session Tracker</h1>
+    <div class="lang-bar">
+        <button class="lang-btn active-lang" id="btn-lang-en" onclick="translateAppTo('en')">English</button>
+        <button class="lang-btn" id="btn-lang-es" onclick="translateAppTo('es')">Español</button>
+        <button class="lang-btn" id="btn-lang-ar" onclick="translateAppTo('ar')">العربية</button>
+        <button class="lang-btn" id="btn-lang-hi" onclick="translateAppTo('hi')">हिन्दी</button>
+    </div>
+
+    <h1 id="ui-main-title">⚽ Soccer Session Tracker</h1>
 
     <div class="card">
-        <h3>1. Session Information</h3>
+        <h3 id="ui-h3-session-info">1. Session Information</h3>
         <div class="checkbox-group">
-            <label><input type="radio" name="stype" id="p-game"> Game</label>
-            <label><input type="radio" name="stype" id="p-scrimmage"> Scrimmage</label>
-            <label><input type="radio" name="stype" id="p-practice" checked> Practice</label>
+            <label style="display:flex; align-items:center; gap:5px;"><input type="radio" name="stype" id="p-game" style="width:auto;"><span id="ui-lbl-game">Game</span></label>
+            <label style="display:flex; align-items:center; gap:5px;"><input type="radio" name="stype" id="p-scrimmage" style="width:auto;"><span id="ui-lbl-scrimmage">Scrimmage</span></label>
+            <label style="display:flex; align-items:center; gap:5px;"><input type="radio" name="stype" id="p-practice" checked style="width:auto;"><span id="ui-lbl-practice">Practice</span></label>
         </div>
         <div class="form-row">
             <input type="date" id="m-date">
@@ -149,196 +212,224 @@
     </div>
 
     <div class="card">
-        <h3>2. Custom Fields Manager</h3>
+        <h3 id="ui-h3-custom-mgr">2. Custom Fields Manager</h3>
         <div class="form-row">
             <input type="text" id="custom-field-input" placeholder="Type metric (e.g. Goals, Miles Ran, Assists)">
-            <button style="background-color: var(--accent);" onclick="generateMetricField()">Create Field</button>
+            <button id="ui-btn-create-field" style="background-color: var(--accent); width:auto; white-space:nowrap;" onclick="generateMetricField()">Create Field</button>
         </div>
     </div>
 
     <div class="card">
-        <h3>3. Active Roster Metric Panel</h3>
+        <h3 id="ui-h3-metric-panel">3. Active Roster Metric Panel</h3>
         <div id="roster-list">
             
             <div class="player-entry">
-                <div class="player-header">⚽ Player Identity Data Configuration</div>
+                <div class="player-header" id="ui-player-config-title">⚽ Player Identity Data Configuration</div>
+                
                 <div class="form-row">
-                    <input type="text" id="p1-name" placeholder="Enter Player Name" value="Striker One">
-                    <input type="text" id="p1-jersey" placeholder="Jersey #" style="max-width:90px;" value="9">
+                    <div class="label-group" style="flex: 3;">
+                        <label id="ui-lbl-pname">Player Name:</label>
+                        <input type="text" id="p1-name" placeholder="Enter full name" value="Striker One">
+                    </div>
+                    <div class="label-group" style="flex: 1;">
+                        <label id="ui-lbl-page">Age:</label>
+                        <input type="number" id="p1-age" placeholder="Age" value="12">
+                    </div>
                 </div>
                 
-                <div class="time-grid">
-                    <div class="time-col">
-                        <label>H1 PLAYED (MINS)</label>
-                        <input type="number" id="p1-h1p" value="0">
-                        <label>H1 BENCH (MINS)</label>
-                        <input type="number" id="p1-h1b" value="0">
+                <div class="form-row">
+                    <div class="label-group" style="flex: 3;">
+                        <label id="ui-lbl-pposition">Player Position:</label>
+                        <input type="text" id="p1-position" placeholder="e.g. Midfielder, Forward" value="Forward">
                     </div>
-                    <div class="time-col">
-                        <label>H2 PLAYED (MINS)</label>
-                        <input type="number" id="p1-h2p" value="0">
-                        <label>H2 BENCH (MINS)</label>
-                        <input type="number" id="p1-h2b" value="0">
+                    <div class="label-group" style="flex: 1;">
+                        <label id="ui-lbl-pnumber">Player Number:</label>
+                        <input type="text" id="p1-jersey" placeholder="#" value="9">
+                    </div>
+                </div>
+                
+                <div class="time-box-container" style="margin-top:15px;">
+                    <div class="time-row-layout">
+                        <span class="half-title" id="ui-title-h1" style="min-width: 90px; margin: 0;">1st Half:</span>
+                        <div class="mini-input-wrapper">
+                            <label id="ui-lbl-h1p">Played:</label>
+                            <input type="number" id="p1-h1p" value="0">
+                        </div>
+                        <div class="mini-input-wrapper">
+                            <label id="ui-lbl-h1b">Benched:</label>
+                            <input type="number" id="p1-h1b" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="time-row-layout" style="margin-top: 10px;">
+                        <span class="half-title" id="ui-title-h2" style="min-width: 90px; margin: 0;">2nd Half:</span>
+                        <div class="mini-input-wrapper">
+                            <label id="ui-lbl-h2p">Played:</label>
+                            <input type="number" id="p1-h2p" value="0">
+                        </div>
+                        <div class="mini-input-wrapper">
+                            <label id="ui-lbl-h2b">Benched:</label>
+                            <input type="number" id="p1-h2b" value="0">
+                        </div>
                     </div>
                 </div>
 
-                <p style="font-weight: bold; margin: 5px 0; font-size: 14px; color: #555;">Tracked Performance Metrics:</p>
+                <p id="ui-lbl-perf-metrics" style="font-weight: bold; margin: 5px 0; font-size: 14px; color: #555;">Tracked Performance Metrics:</p>
                 <div id="dynamic-stat-zone">
                     </div>
 
                 <div class="action-row">
-                    <button class="sms-btn" onclick="shareDataLink('sms')">💬 Text Player Report</button>
-                    <button class="email-btn" onclick="shareDataLink('email')">✉️ Email Player Report</button>
+                    <button class="sms-btn" id="ui-btn-sms" onclick="shareDataLink('sms')">💬 Text Player Report</button>
+                    <button class="email-btn" id="ui-btn-email" onclick="shareDataLink('email')">✉️ Email Player Report</button>
                 </div>
             </div>
 
         </div>
 
-        <button class="master-btn" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
+        <button class="master-btn" id="ui-btn-csv" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
     </div>
 
     <script>
-        // Track the created fields securely in memory layout
         var assignedMetricFields = [];
+        var activeLanguageCode = "en";
 
-        // Set standard baseline timeline
+        // Multilingual Localization Storage Layout Dictionary Matrix
+        var dictionary = {
+            en: {
+                mainTitle: "⚽ Soccer Session Tracker",
+                sessionInfo: "1. Session Information",
+                game: "Game", scrimmage: "Scrimmage", practice: "Practice",
+                customMgr: "2. Custom Fields Manager",
+                createField: "Create Field",
+                metricPanel: "3. Active Roster Metric Panel",
+                playerConfig: "⚽ Player Identity Data Configuration",
+                pName: "Player Name:", pAge: "Age:", pPosition: "Player Position:", pNumber: "Player Number:",
+                h1: "1st Half:", h2: "2nd Half:", Played: "Played:", Benched: "Benched:",
+                perfMetrics: "Tracked Performance Metrics:",
+                txtPlayer: "💬 Text Player Report", emailPlayer: "✉️ Email Player Report",
+                exportCsv: "📊 Export Stats to Spreadsheet (CSV)",
+                descPlaceHolder: "Opponent Name / Notes",
+                fieldPlaceHolder: "Type metric (e.g. Goals, Miles Ran)",
+                alertNoName: "Please type a metric field name first!",
+                alertDup: "This metric field already exists below!",
+                confirmDel: "Are you sure you want to completely delete this metric field? All counted data for it will be removed.",
+                reportHeader: "📊 STAT REPORT",
+                deleteText: "Delete"
+            },
+            es: {
+                mainTitle: "⚽ Rastreador de Sesiones de Fútbol",
+                sessionInfo: "1. Información de la Sesión",
+                game: "Partido", scrimmage: "Interescuadras", practice: "Entrenamiento",
+                customMgr: "2. Gestor de Campos Personalizados",
+                createField: "Crear Campo",
+                metricPanel: "3. Panel de Métricas de la Plantilla Activa",
+                playerConfig: "⚽ Configuración de Datos de Identidad del Jugador",
+                pName: "Nombre del Jugador:", pAge: "Edad:", pPosition: "Posición del Jugador:", pNumber: "Número del Jugador:",
+                h1: "1er Tiempo:", h2: "2do Tiempo:", Played: "Jugado:", Benched: "Banca:",
+                perfMetrics: "Métricas de Rendimiento Registradas:",
+                txtPlayer: "💬 Enviar Reporte por Texto", emailPlayer: "✉️ Enviar Reporte por Correo",
+                exportCsv: "📊 Exportar Estadísticas a Hoja de Cálculo (CSV)",
+                descPlaceHolder: "Nombre del Rival / Notas",
+                fieldPlaceHolder: "Escribe la métrica (ej. Goles, Millas Corridas)",
+                alertNoName: "¡Por favor, escribe primero un nombre para la métrica!",
+                alertDup: "¡Este campo de métrica ya existe abajo!",
+                confirmDel: "¿Estás seguro de que quieres eliminar completamente este campo de métrica? Se borrarán todos los datos contados.",
+                reportHeader: "📊 REPORTE DE ESTADÍSTICAS",
+                deleteText: "Eliminar"
+            },
+            ar: {
+                mainTitle: "⚽ متتبع جلسات كرة القدم",
+                sessionInfo: "1. معلومات الجلسة",
+                game: "مباراة", scrimmage: "تقسيمة", practice: "تدريب",
+                customMgr: "2. مدير الحقول المخصصة",
+                createField: "إنشاء حقل",
+                metricPanel: "3. لوحة مقاييس قائمة اللاعبين النشطة",
+                playerConfig: "⚽ تكوين بيانات هوية اللاعب",
+                pName: "اسم اللاعب:", pAge: "العمر:", pPosition: "مركز اللاعب:", pNumber: "رقم اللاعب:",
+                h1: "الشوط الأول:", h2: "الشوط الثاني:", Played: "لعب:", Benched: "بديل:",
+                perfMetrics: "مقاييس الأداء المتتبعة:",
+                txtPlayer: "💬 إرسال تقرير نصي للاعب", emailPlayer: "✉️ إرسال تقرير بالبريد الإلكتروني",
+                exportCsv: "📊 تصدير البيانات إلى جدول (CSV)",
+                descPlaceHolder: "اسم الخصم / ملاحظات",
+                fieldPlaceHolder: "اكتب المقياس (مثل أهداف، الأميال المقطوعة)",
+                alertNoName: "يرجى كتابة اسم حقل المقياس أولاً!",
+                alertDup: "هذا الحقل موجود بالفعل أدناه!",
+                confirmDel: "هل أنت متأكد أنك تريد حذف هذا الحقل تمامًا؟ سيتم إزالة جميع البيانات المحسوبة له.",
+                reportHeader: "📊 تقرير الإحصائيات",
+                deleteText: "حذف"
+            },
+            hi: {
+                mainTitle: "⚽ सॉकर सेशन और स्टेट ट्रैकर",
+                sessionInfo: "1. सेशन की जानकारी",
+                game: "मैच", scrimmage: "अभ्यास मैच", practice: "प्रैक्टिस",
+                customMgr: "2. कस्टम फ़ील्ड मैनेजर",
+                createField: "फ़ील्ड बनाएं",
+                metricPanel: "3. एक्टिव रोस्टर मेट्रिक पैनल",
+                playerConfig: "⚽ खिलाड़ी पहचान डेटा कॉन्फ़िगरेशन",
+                pName: "खिलाड़ी का नाम:", pAge: "उम्र:", pPosition: "खिलाड़ी की पोजीशन:", pNumber: "खिलाड़ी का नंबर:",
+                h1: "पहला हाफ:", h2: "दूसरा हाफ:", Played: "खेला:", Benched: "बेंच पर:",
+                perfMetrics: "ट्रैक किए गए प्रदर्शन मेट्रिक्स:",
+                txtPlayer: "💬 खिलाड़ी रिपोर्ट टेक्स्ट करें", emailPlayer: "✉️ खिलाड़ी रिपोर्ट ईमेल करें",
+                exportCsv: "📊 स्प्रेडशीट पर एक्सपोर्ट करें (CSV)",
+                descPlaceHolder: "विपक्षी टीम का नाम / नोट्स",
+                fieldPlaceHolder: "मेट्रिक टाइप करें (जैसे गोल, दौड़े गए मील)",
+                alertNoName: "कृपया पहले मेट्रिक फ़ील्ड का नाम टाइप करें!",
+                alertDup: "यह मेट्रिक फ़ील्ड नीचे पहले से मौजूद है!",
+                confirmDel: "क्या आप वाकई इस मेट्रिक फ़ील्ड को पूरी तरह से हटाना चाहते हैं? इसके सभी गिने गए डेटा हटा दिए जाएंगे।",
+                reportHeader: "📊 स्टेट रिपोर्ट",
+                deleteText: "हटाएं"
+            }
+        };
+
         document.getElementById('m-date').valueAsDate = new Date();
 
-        // Safe DOM Generator to add metric line items with full error safety
-        function generateMetricField() {
-            var inputNode = document.getElementById('custom-field-input');
-            var rawName = inputNode.value.trim();
+        function translateAppTo(langCode) {
+            activeLanguageCode = langCode;
             
-            if (!rawName) {
-                alert("Please type a metric field name first!");
-                return;
-            }
-
-            // Clean clean string to avoid element attribute formatting errors
-            var elementIdSafe = "metric-" + rawName.toLowerCase().replace(/[^a-z0-9]/g, "-");
-
-            // Prevent duplicating identical tracker IDs
-            if (assignedMetricFields.some(item => item.id === elementIdSafe)) {
-                alert("This metric field already exists below!");
-                return;
-            }
-
-            var fieldObject = {
-                id: elementIdSafe,
-                labelName: rawName
-            };
-            assignedMetricFields.push(fieldObject);
-
-            var wrapperRow = document.createElement('div');
-            wrapperRow.className = "stat-wrapper-row";
-            wrapperRow.id = "wrap-" + elementIdSafe;
-
-            wrapperRow.innerHTML = `
-                <span class="stat-label-title">${rawName}:</span>
-                <span class="count-num" id="val-${elementIdSafe}">0</span>
-                <button class="plus-btn" onclick="incrementStat('${elementIdSafe}')">+1</button>
-                <button class="trash-btn" onclick="destroyMetricField('${elementIdSafe}')">Delete</button>
-            `;
-
-            document.getElementById('dynamic-stat-zone').appendChild(wrapperRow);
-            inputNode.value = ""; // Clear entry field box
-        }
-
-        function incrementStat(targetId) {
-            var counterNode = document.getElementById("val-" + targetId);
-            var parsedVal = parseInt(counterNode.innerText) || 0;
-            counterNode.innerText = parsedVal + 1;
-        }
-
-        function destroyMetricField(targetId) {
-            if (confirm("Are you sure you want to completely delete this metric field? All counted data for it will be removed.")) {
-                var targetRowElement = document.getElementById("wrap-" + targetId);
-                if (targetRowElement) {
-                    targetRowElement.remove();
-                }
-                assignedMetricFields = assignedMetricFields.filter(item => item.id !== targetId);
-            }
-        }
-
-        function getSessionType() {
-            if(document.getElementById('p-game').checked) return "Game";
-            if(document.getElementById('p-scrimmage').checked) return "Scrimmage";
-            return "Practice";
-        }
-
-        function compileDataMessageText() {
-            var name = document.getElementById('p1-name').value;
-            var jrs = document.getElementById('p1-jersey').value;
-            var h1p = document.getElementById('p1-h1p').value;
-            var h1b = document.getElementById('p1-h1b').value;
-            var h2p = document.getElementById('p1-h2p').value;
-            var h2b = document.getElementById('p1-h2b').value;
-            
-            var date = document.getElementById('m-date').value;
-            var type = getSessionType();
-            var desc = document.getElementById('m-desc').value || type;
-
-            var txt = "📊 STAT REPORT: " + desc.toUpperCase() + " (" + date + ")\n";
-            txt += "Player: #" + jrs + " " + name + "\n";
-            txt += "------------------------\n";
-            txt += "⏱️ H1 Played/Bench: " + h1p + "m / " + h1b + "m\n";
-            txt += "⏱️ H2 Played/Bench: " + h2p + "m / " + h2b + "m\n";
-            txt += "------------------------\n";
-            
-            // Loop and compile only current live created metrics dynamically
-            if (assignedMetricFields.length === 0) {
-                txt += "No performance metrics recorded.";
-            } else {
-                assignedMetricFields.forEach(function(metric) {
-                    var currentScoreValue = document.getElementById("val-" + metric.id).innerText;
-                    txt += "• " + metric.labelName + ": " + currentScoreValue + "\n";
-                });
-            }
-            return txt;
-        }
-
-        function shareDataLink(medium) {
-            var msg = compileDataMessageText();
-            if(medium === 'sms') {
-                window.location.href = "sms:?&body=" + encodeURIComponent(msg);
-            } else {
-                window.location.href = "mailto:?subject=Soccer Performance Update&body=" + encodeURIComponent(msg);
-            }
-        }
-
-        function extractCSV() {
-            var name = document.getElementById('p1-name').value;
-            var jrs = document.getElementById('p1-jersey').value;
-            var h1p = document.getElementById('p1-h1p').value;
-            var h1b = document.getElementById('p1-h1b').value;
-            var h2p = document.getElementById('p1-h2p').value;
-            var h2b = document.getElementById('p1-h2b').value;
-
-            var date = document.getElementById('m-date').value;
-            var type = getSessionType();
-            var desc = document.getElementById('m-desc').value || type;
-
-            // Header formulation line arrays
-            var csvHeaders = ["Date", "Session Type", "Description", "Player Name", "Jersey #", "H1 Played", "H1 Bench", "H2 Played", "H2 Bench"];
-            var csvValues = [date, type, desc, name, jrs, h1p, h1b, h2p, h2b];
-
-            // Dynamically push the custom entries into the extraction document
-            assignedMetricFields.forEach(function(metric) {
-                csvHeaders.push(metric.labelName);
-                csvValues.push(document.getElementById("val-" + metric.id).innerText);
+            // Toggle active status UI indicators on top languages bar
+            document.querySelectorAll('.lang-btn').forEach(function(btn){
+                btn.classList.remove('active-lang');
             });
+            document.getElementById('btn-lang-' + langCode).classList.add('active-lang');
 
-            var finalCsvOutputString = csvHeaders.join(",") + "\n" + csvValues.join(",");
+            // Handle RTL layout adjustment context explicitly for Arabic
+            var htmlNode = document.getElementById('main-html-tag');
+            if(langCode === 'ar') {
+                htmlNode.setAttribute('dir', 'rtl');
+            } else {
+                htmlNode.setAttribute('dir', 'ltr');
+            }
 
-            var blob = new Blob([finalCsvOutputString], { type: 'text/csv;charset=utf-8;' });
-            var dl = document.createElement("a");
-            dl.setAttribute("href", URL.createObjectURL(blob));
-            dl.setAttribute("download", "soccer_metrics_" + name.toLowerCase().replace(/[^a-z0-9]/g, "_") + ".csv");
-            dl.setAttribute("style", "display:none");
-            document.body.appendChild(dl);
-            dl.click();
-            document.body.removeChild(dl);
-        }
-    </script>
-</body>
-</html>
+            // Map standard static UI translations from active dictionary selection
+            var localized = dictionary[langCode];
+            document.getElementById('ui-main-title').innerText = localized.mainTitle;
+            document.getElementById('ui-h3-session-info').innerText = localized.sessionInfo;
+            document.getElementById('ui-lbl-game').innerText = localized.game;
+            document.getElementById('ui-lbl-scrimmage').innerText = localized.scrimmage;
+            document.getElementById('ui-lbl-practice').innerText = localized.practice;
+            document.getElementById('ui-h3-custom-mgr').innerText = localized.customMgr;
+            document.getElementById('ui-btn-create-field').innerText = localized.createField;
+            document.getElementById('ui-h3-metric-panel').innerText = localized.metricPanel;
+            document.getElementById('ui-player-config-title').innerText = localized.playerConfig;
+            
+            document.getElementById('ui-lbl-pname').innerText = localized.pName;
+            document.getElementById('ui-lbl-page').innerText = localized.pAge;
+            document.getElementById('ui-lbl-pposition').innerText = localized.pPosition;
+            document.getElementById('ui-lbl-pnumber').innerText = localized.pNumber;
+            
+            document.getElementById('ui-title-h1').innerText = localized.h1;
+            document.getElementById('ui-lbl-h1p').innerText = localized.Played;
+            document.getElementById('ui-lbl-h1b').innerText = localized.Benched;
+            
+            document.getElementById('ui-title-h2').innerText = localized.h2;
+            document.getElementById('ui-lbl-h2p').innerText = localized.Played;
+            document.getElementById('ui-lbl-h2b').innerText = localized.Benched;
+            
+            document.getElementById('ui-lbl-perf-metrics').innerText = localized.perfMetrics;
+            document.getElementById('ui-btn-sms').innerText = localized.txtPlayer;
+            document.getElementById('ui-btn-email').innerText = localized.emailPlayer;
+            document.getElementById('ui-btn-csv').innerText = localized.exportCsv;
+            
+            // Set dynamic text attributes inside fields placeholders
+            document.getElementById('m-desc').setAttribute('placeholder', localized.descPlaceHolder);
+            document.getElem
