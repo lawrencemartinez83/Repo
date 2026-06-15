@@ -83,7 +83,6 @@
             margin-bottom: 15px;
         }
         
-        /* Expanded Time Container Layout */
         .time-box-container {
             background: #edf7ed;
             padding: 15px;
@@ -153,15 +152,18 @@
         .plus-btn { background-color: var(--accent); padding: 8px 15px; font-size: 14px; width: auto; }
         .trash-btn { background-color: var(--danger); padding: 8px 12px; font-size: 13px; width: auto; }
         
+        .action-box-container {
+            margin-top: 20px;
+        }
         .action-row {
             display: flex;
             gap: 8px;
-            margin-top: 20px;
             margin-bottom: 10px;
         }
-        .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 12px; width: auto; }
-        .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 12px; width: auto; }
-        .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; }
+        .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 14px; width: auto; }
+        .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 14px; width: auto; }
+        .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px; }
+        .clear-btn { background-color: #757575; width: 100%; padding: 10px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -172,21 +174,21 @@
         <h3>1. Session Information</h3>
         <div class="checkbox-group">
             <label style="display:flex; align-items:center; gap:5px;">
-                <input type="radio" name="stype" id="p-game" style="width:auto;">
+                <input type="radio" name="stype" id="p-game" onchange="autoSaveData()">
                 <span>Game</span>
             </label>
             <label style="display:flex; align-items:center; gap:5px;">
-                <input type="radio" name="stype" id="p-scrimmage" style="width:auto;">
+                <input type="radio" name="stype" id="p-scrimmage" onchange="autoSaveData()">
                 <span>Scrimmage</span>
             </label>
             <label style="display:flex; align-items:center; gap:5px;">
-                <input type="radio" name="stype" id="p-practice" checked style="width:auto;">
+                <input type="radio" name="stype" id="p-practice" checked onchange="autoSaveData()">
                 <span>Practice</span>
             </label>
         </div>
         <div class="form-row">
-            <input type="date" id="m-date">
-            <input type="text" id="m-desc" placeholder="Opponent Name / Notes">
+            <input type="date" id="m-date" oninput="autoSaveData()">
+            <input type="text" id="m-desc" placeholder="Opponent Name / Notes" oninput="autoSaveData()">
         </div>
     </div>
 
@@ -207,22 +209,22 @@
             <div class="form-row">
                 <div class="label-group" style="flex: 3;">
                     <label>Player Name:</label>
-                    <input type="text" id="p1-name" placeholder="Enter full name" value="Striker One">
+                    <input type="text" id="p1-name" placeholder="Enter full name" oninput="autoSaveData()">
                 </div>
                 <div class="label-group" style="flex: 1;">
                     <label>Age:</label>
-                    <input type="number" id="p1-age" placeholder="Age" value="12">
+                    <input type="number" id="p1-age" placeholder="Age" oninput="autoSaveData()">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="label-group" style="flex: 3;">
                     <label>Player Position:</label>
-                    <input type="text" id="p1-position" placeholder="e.g. Midfielder, Forward" value="Forward">
+                    <input type="text" id="p1-position" placeholder="e.g. Midfielder, Forward" oninput="autoSaveData()">
                 </div>
                 <div class="label-group" style="flex: 1;">
                     <label>Player Number:</label>
-                    <input type="text" id="p1-jersey" placeholder="#" value="9">
+                    <input type="text" id="p1-jersey" placeholder="#" oninput="autoSaveData()">
                 </div>
             </div>
             
@@ -231,11 +233,11 @@
                     <span class="half-title" style="min-width:90px;">1st Half:</span>
                     <div class="mini-input-wrapper">
                         <label>Played:</label>
-                        <input type="number" id="p1-h1p" value="0">
+                        <input type="number" id="p1-h1p" oninput="autoSaveData()">
                     </div>
                     <div class="mini-input-wrapper">
                         <label>Benched:</label>
-                        <input type="number" id="p1-h1b" value="0">
+                        <input type="number" id="p1-h1b" oninput="autoSaveData()">
                     </div>
                 </div>
                 
@@ -243,31 +245,124 @@
                     <span class="half-title" style="min-width:90px;">2nd Half:</span>
                     <div class="mini-input-wrapper">
                         <label>Played:</label>
-                        <input type="number" id="p1-h2p" value="0">
+                        <input type="number" id="p1-h2p" oninput="autoSaveData()">
                     </div>
                     <div class="mini-input-wrapper">
                         <label>Benched:</label>
-                        <input type="number" id="p1-h2b" value="0">
+                        <input type="number" id="p1-h2b" oninput="autoSaveData()">
                     </div>
                 </div>
             </div>
 
             <p style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Tracked Performance Metrics:</p>
             <div id="dynamic-stat-zone"></div>
-
-            <div class="action-row">
-                <button class="sms-btn" onclick="shareDataLink('sms')">💬 Text Player Report</button>
-                <button class="email-btn" onclick="shareDataLink('email')">✉️ Email Player Report</button>
-            </div>
-            <button class="master-btn" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
         </div>
+    </div>
+
+    <div class="card action-box-container">
+        <div class="action-row">
+            <button class="sms-btn" onclick="shareDataLink('sms')">💬 Text Player Report</button>
+            <button class="email-btn" onclick="shareDataLink('email')">✉️ Email Player Report</button>
+        </div>
+        <button class="master-btn" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
+        <button class="clear-btn" onclick="wipeFormFieldsReset()">🔄 Clear Form / Reset Values</button>
     </div>
 
     <script>
         var assignedMetricFields = [];
 
-        document.getElementById('m-date').valueAsDate = new Date();
+        window.onload = function() {
+            loadSavedData();
+        };
 
+        // --- WRITES SNAPSHOT DIRECTLY TO THE PHONE ---
+        function autoSaveData() {
+            var sessionType = "Practice";
+            if (document.getElementById('p-game').checked) sessionType = "Game";
+            if (document.getElementById('p-scrimmage').checked) sessionType = "Scrimmage";
+
+            var appState = {
+                sessionType: sessionType,
+                date: document.getElementById('m-date').value,
+                desc: document.getElementById('m-desc').value,
+                name: document.getElementById('p1-name').value,
+                age: document.getElementById('p1-age').value,
+                position: document.getElementById('p1-position').value,
+                jersey: document.getElementById('p1-jersey').value,
+                h1p: document.getElementById('p1-h1p').value,
+                h1b: document.getElementById('p1-h1b').value,
+                h2p: document.getElementById('p1-h2p').value,
+                h2b: document.getElementById('p1-h2b').value,
+                customMetrics: assignedMetricFields.map(function(metric) {
+                    var targetNode = document.getElementById("val-" + metric.id);
+                    return {
+                        id: metric.id,
+                        labelName: metric.labelName,
+                        value: targetNode ? targetNode.innerText : "0"
+                    };
+                })
+            };
+
+            localStorage.setItem("soccer_tracker_backup", JSON.stringify(appState));
+        }
+
+        // --- READS BACKUP DIRECTLY FROM THE PHONE ---
+        function loadSavedData() {
+            var rawBackup = localStorage.getItem("soccer_tracker_backup");
+            
+            if (!rawBackup) {
+                document.getElementById('m-date').valueAsDate = new Date();
+                document.getElementById('p1-name').value = "Striker One";
+                document.getElementById('p1-age').value = "12";
+                document.getElementById('p1-position').value = "Forward";
+                document.getElementById('p1-jersey').value = "9";
+                document.getElementById('p1-h1p').value = "0";
+                document.getElementById('p1-h1b').value = "0";
+                document.getElementById('p1-h2p').value = "0";
+                document.getElementById('p1-h2b').value = "0";
+                return;
+            }
+
+            var savedState = JSON.parse(rawBackup);
+
+            document.getElementById('m-date').value = savedState.date || "";
+            document.getElementById('m-desc').value = savedState.desc || "";
+            document.getElementById('p1-name').value = savedState.name || "";
+            document.getElementById('p1-age').value = savedState.age || "";
+            document.getElementById('p1-position').value = savedState.position || "";
+            document.getElementById('p1-jersey').value = savedState.jersey || "";
+            document.getElementById('p1-h1p').value = savedState.h1p || "0";
+            document.getElementById('p1-h1b').value = savedState.h1b || "0";
+            document.getElementById('p1-h2p').value = savedState.h2p || "0";
+            document.getElementById('p1-h2b').value = savedState.h2b || "0";
+
+            document.getElementById('p-game').checked = (savedState.sessionType === "Game");
+            document.getElementById('p-scrimmage').checked = (savedState.sessionType === "Scrimmage");
+            document.getElementById('p-practice').checked = (savedState.sessionType === "Practice");
+
+            var zone = document.getElementById('dynamic-stat-zone');
+            zone.innerHTML = "";
+            assignedMetricFields = [];
+
+            if (savedState.customMetrics) {
+                savedState.customMetrics.forEach(function(metricData) {
+                    assignedMetricFields.push({ id: metricData.id, labelName: metricData.labelName });
+                    
+                    var wrapperRow = document.createElement('div');
+                    wrapperRow.className = "stat-wrapper-row";
+                    wrapperRow.id = "wrap-" + metricData.id;
+                    wrapperRow.innerHTML = `
+                        <span class="stat-label-title">${metricData.labelName}:</span>
+                        <span class="count-num" id="val-${metricData.id}">${metricData.value}</span>
+                        <button class="plus-btn" onclick="incrementStat('${metricData.id}')">+1</button>
+                        <button class="trash-btn" onclick="destroyMetricField('${metricData.id}')">Delete</button>
+                    `;
+                    zone.appendChild(wrapperRow);
+                });
+            }
+        }
+
+        // --- ISOLATED SAFE CREATION TECHNIQUE ---
         function generateMetricField() {
             var inputNode = document.getElementById('custom-field-input');
             var rawName = inputNode.value.trim();
@@ -275,3 +370,109 @@
             if (!rawName) {
                 alert("Please type a metric field name first!");
                 return;
+            }
+
+            var elementIdSafe = "metric-" + Date.now();
+            
+            // Push object to data register array
+            assignedMetricFields.push({ id: elementIdSafe, labelName: rawName });
+
+            // Build structural UI elements row
+            var wrapperRow = document.createElement('div');
+            wrapperRow.className = "stat-wrapper-row";
+            wrapperRow.id = "wrap-" + elementIdSafe;
+            wrapperRow.innerHTML = `
+                <span class="stat-label-title">${rawName}:</span>
+                <span class="count-num" id="val-${elementIdSafe}">0</span>
+                <button class="plus-btn" onclick="incrementStat('${elementIdSafe}')">+1</button>
+                <button class="trash-btn" onclick="destroyMetricField('${elementIdSafe}')">Delete</button>
+            `;
+
+            document.getElementById('dynamic-stat-zone').appendChild(wrapperRow);
+            inputNode.value = "";
+            
+            // Force immediate lock to device data storage disk
+            autoSaveData(); 
+        }
+
+        function incrementStat(targetId) {
+            var counterNode = document.getElementById("val-" + targetId);
+            if (counterNode) {
+                var parsedVal = parseInt(counterNode.innerText) || 0;
+                counterNode.innerText = parsedVal + 1;
+                autoSaveData(); 
+            }
+        }
+
+        function destroyMetricField(targetId) {
+            if (confirm("Are you sure you want to completely delete this metric field? All counted data for it will be removed.")) {
+                var targetRowElement = document.getElementById("wrap-" + targetId);
+                if (targetRowElement) { targetRowElement.remove(); }
+                assignedMetricFields = assignedMetricFields.filter(item => item.id !== targetId);
+                autoSaveData(); 
+            }
+        }
+
+        function getSessionType() {
+            if(document.getElementById('p-game').checked) return "Game";
+            if(document.getElementById('p-scrimmage').checked) return "Scrimmage";
+            return "Practice";
+        }
+
+        function compileDataMessageText() {
+            var name = document.getElementById('p1-name').value || "N/A";
+            var age = document.getElementById('p1-age').value || "N/A";
+            var pos = document.getElementById('p1-position').value || "N/A";
+            var jrs = document.getElementById('p1-jersey').value || "N/A";
+            var h1p = document.getElementById('p1-h1p').value || "0";
+            var h1b = document.getElementById('p1-h1b').value || "0";
+            var h2p = document.getElementById('p1-h2p').value || "0";
+            var h2b = document.getElementById('p1-h2b').value || "0";
+            var date = document.getElementById('m-date').value || "";
+            var type = getSessionType();
+            var desc = document.getElementById('m-desc').value || type;
+
+            var txt = "📊 STAT REPORT: " + desc.toUpperCase() + " (" + date + ")\n";
+            txt += "Player: #" + jrs + " " + name + "\n";
+            txt += "Pos: " + pos + " | Age: " + age + "\n";
+            txt += "------------------------\n";
+            txt += "⏱️ H1: " + h1p + "m Played / " + h1b + "m Bench\n";
+            txt += "⏱️ H2: " + h2p + "m Played / " + h2b + "m Bench\n";
+            txt += "------------------------\n";
+            
+            if (assignedMetricFields.length === 0) {
+                txt += "No performance metrics recorded.";
+            } else {
+                assignedMetricFields.forEach(function(metric) {
+                    var node = document.getElementById("val-" + metric.id);
+                    var val = node ? node.innerText : "0";
+                    txt += "• " + metric.labelName + ": " + val + "\n";
+                });
+            }
+            return txt;
+        }
+
+        function shareDataLink(medium) {
+            var msg = compileDataMessageText();
+            if(medium === 'sms') {
+                window.location.href = "sms:?&body=" + encodeURIComponent(msg);
+            } else {
+                window.location.href = "mailto:?subject=Soccer Performance Update&body=" + encodeURIComponent(msg);
+            }
+        }
+
+        function extractCSV() {
+            var name = document.getElementById('p1-name').value || "N/A";
+            var age = document.getElementById('p1-age').value || "N/A";
+            var pos = document.getElementById('p1-position').value || "N/A";
+            var jrs = document.getElementById('p1-jersey').value || "N/A";
+            var h1p = document.getElementById('p1-h1p').value || "0";
+            var h1b = document.getElementById('p1-h1b').value || "0";
+            var h2p = document.getElementById('p1-h2p').value || "0";
+            var h2b = document.getElementById('p1-h2b').value || "0";
+            var date = document.getElementById('m-date').value || "";
+            var type = getSessionType();
+            var desc = document.getElementById('m-desc').value || type;
+
+            var csvHeaders = ["Date", "Session Type", "Description", "Player Name", "Age", "Position", "Jersey #", "H1 Played", "H1 Bench", "H2 Played", "H2 Bench"];
+    
