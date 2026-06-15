@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Session & Stat Tracker</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #1b5e20;
+            --dark: #212121;
+            --light: #f5f5f5;
+            --accent: #0288d1;
+            --danger: #d32f2f;
+            --warning: #f57c00;
+            --spreadsheet: #157f43;
+            --shareall: #e65100;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        h1, h2, h3 { text-align: center; color: var(--secondary); margin-top: 5px; }
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 10px 0;
+            font-weight: bold;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        input, button, select {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="text"], input[type="date"], input[type="number"], select { flex: 1; min-width: 0; }
+        input[type="checkbox"] { width: 20px; height: 20px; }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:active { background-color: var(--secondary); }
+        
+        .field-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #edf7ed;
+            border: 1px solid #c8e6c9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin: 4px;
+            font-size: 14px;
+        }
+        .remove-field-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .player-row {
+            border-bottom: 3px solid var(--light);
+            padding: 20px 0;
+        }
+        .player-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .player-info {
+            flex: 1;
+        }
+        .player-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .player-meta {
+            font-size: 13px;
+            color: #666;
+            margin: 2px 0 0 0;
+            line-height: 1.4;
+        }
+        
+        .time-box {
+            background: #edf7ed;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .half-header {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            border-bottom: 1px dashed #c8e6c9;
+            padding-bottom: 2px;
+        }
+        .time-control-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .time-control-row label {
+            font-size: 12px;
+            font-weight: 500;
+            width: 85px;
+        }
+        .timer-action-btn {
+            padding: 6px 10px;
+            font-size: 12px;
+            background-color: var(--primary);
+            border-radius: 4px;
+        }
+        .timer-action-btn.active-run {
+            background-color: var(--danger);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .stat-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .counter-btn { background-color: var(--accent); font-size: 18px; padding: 8px; }
+        
+        .share-row-layout {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 10px; }
+        .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 10px; }
+
+        .spreadsheet-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-top: 15px;}
+        .delete-btn { background-color: var(--danger); padding: 5px 10px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <h1>⚽ Soccer Session Tracker</h1>
+
+    <div class="card">
+        <h3>1. Session Setup</h3>
+        
+        <div class="checkbox-group">
+            <label><input type="checkbox" id="check-game" onchange="changeType('Game')"> Game</label>
+            <label><input type="checkbox" id="check-scrimmage" onchange="changeType('Scrimmage')"> Scrimmage</label>
+            <label><input type="checkbox" id="check-practice" onchange="changeType('Practice')" checked> Practice</label>
+        </div>
+
+        <div class="form-group">
+            <div class="form-row">
+                <input type="date" id="match-date">
+                <input type="text" id="match-opponent" placeholder="Opponent / Title Description">
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+
+        <div class="form-row">
+            <input type="text" id="new-stat-name" placeholder="New stat item (e.g. Shots, Saves)">
+            <button onclick="addNewStatField()">Add Field</button>
+        </div>
+        <div id="active-stats-list" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="card">
+        <h3>2. Add Player</h3>
+        <div class="form-group">
+            <div class="form-row">
+                <input type="text" id="player-name" placeholder="Player Full Name">
+                <input type="text" id="player-jersey" placeholder="Jersey #" style="max-width: 90px;">
+            </div>
+            
+            <div class="form-row">
+                <input type="text" id="player-position" placeholder="Position / Role">
+                <input type="number" id="player-age" placeholder="Age" style="max-width: 80px;">
+            </div>
+
+            <div class="form-row">
+                <input type="text" id="player-height" placeholder="Height">
+                <input type="text" id="player-weight" placeholder="Weight">
+            </div>
+
+            <button onclick="registerNewPlayer()">Add Player to Roster</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Roster Metric Panel</h2>
+        <div id="roster-container"></div>
+        
+        <button class="spreadsheet-btn" onclick="exportToCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
+        
+        <div class="share-row-layout">
+            <button class="sms-btn" onclick="shareEntireRosterSummary('sms')">💬 Text Squad Summary</button>
+            <button class="email-btn" onclick="shareEntireRosterSummary('email')">✉️ Email Squad Summary</button>
+        </div>
+    </div>
+
+    <script>
+        let statsSchema = [];
+        let players = [];
+        let clockInterval = null;
+
+        try {
+            let rawSchema = localStorage.getItem('gh_soccer_schema_v9');
+            let rawPlayers = localStorage.getItem('gh_soccer_players_v9');
+            if (rawSchema) statsSchema = JSON.parse(rawSchema);
+            if (rawPlayers) players = JSON.parse(rawPlayers);
+        } catch(e) {
+            statsSchema = [];
+            players = [];
+        }
+
+        document.getElementById('match-date').valueAsDate = new Date();
+
+        function changeType(type) {
+            document.getElementById('check-game').checked = (type === 'Game');
+            document.getElementById('check-scrimmage').checked = (type === 'Scrimmage');
+            document.getElementById('check-practice').checked = (type === 'Practice');
+        }
+
+        function currentTypeString() {
+            if (document.getElementById('check-game').checked) return "Game";
+            if (document.getElementById('check-scrimmage').checked) return "Scrimmage";
+            return "Practice";
+        }
+
+        function saveAppState() {
+            localStorage.setItem('gh_soccer_schema_v9', JSON.stringify(statsSchema));
+            localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
+            renderInterface();
+        }
+
+        function addNewStatField() {
+            const input = document.getElementById('new-stat-name');
+            const name = input.value.trim();
+            if (name && !statsSchema.includes(name)) {
+                statsSchema.push(name);
+                players.forEach(p => {
+                    if (!p.stats) p.stats = {};
+                    p.stats[name] = 0;
+                });
+                input.value = '';
+                saveAppState();
+            }
+        }
+
+        function removeStatField(name) {
+            if (confirm(`Remove custom metric "${name}" entirely?`)) {
+                statsSchema = statsSchema.filter(s => s !== name);
+                players.forEach(p => { if (p.stats) delete p.stats[name]; });
+                saveAppState();
+            }
+        }
+
+        function registerNewPlayer() {
+            const nameInp = document.getElementById('player-name');
+            const jerseyInp = document.getElementById('player-jersey');
+            const posInp = document.getElementById('player-position');
+            const ageInp = document.getElementById('player-age');
+            const hInp = document.getElementById('player-height');
+            const wInp = document.getElementById('player-weight');
+
+            if (!nameInp.value.trim()) {
+                alert("Please enter a player name.");
+                return;
+            }
+
+            let initialStats = {};
+            statsSchema.forEach(s => initialStats[s] = 0);
+
+            players.push({
+                id: Date.now(),
+                name: nameInp.value.trim(),
+                jersey: jerseyInp.value.trim() || "N/A",
+                position: posInp.value.trim() || "N/A",
+                age: ageInp.value.trim() || "N/A",
+                height: hInp.value.trim() || "N/A",
+                weight: wInp.value.trim() || "N/A",
+                stats: initialStats,
+                h1Play: 0, h1Sat: 0,
+                h2Play: 0, h2Sat: 0,
+                activeClock: null
+            });
+
+            nameInp.value = ''; jerseyInp.value = ''; posInp.value = ''; ageInp.value = ''; hInp.value = ''; wInp.value = '';
+            saveAppState();
+        }
+
+        function updateTimeManual(playerId, key, val) {
+            let player = players.find(p => p.id === playerId);
+            if (player) {
+                player[key] = parseFloat(val) || 0;
+                localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
+            }
+        }
+
+        function toggleClock(playerId, clockType) {
+            let player = players.find(p => p.id === playerId);
+            if (!player) return;
+
+            if (player.activeClock === clockType) {
+                player.activeClock = null;
+            } else {
+                player.activeClock = clockType;
+            }
+
+            localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
+            renderInterface();
+            startGlobalTicker();
+        }
+
+        function startGlobalTicker() {
+            let dynamicActive = players.some(p => p.activeClock !== null);
+            if (!dynamicActive) {
+                if (clockInterval) { clearInterval(clockInterval); clockInterval = null; }
+                return;
+            }
+
+            if (!clockInterval) {
+                clockInterval = setInterval(() => {
+                    players.forEach(p => {
+                        if (p.activeClock) {
+                            p[p.activeClock] = (parseFloat(p[p.activeClock]) || 0) + 1;
+                        }
+                    });
+                    localStorage.setItem('gh_soccer_players_v9', JSON.stringify(players));
+                    renderInterface();
+                }, 60000);
+            }
+        }
+
+        function addOne(playerId, stat) {
+            let player = players.find(p => p.id === playerId);
+            if (player) {
+                if (!player.stats) player.stats = {};
+                player.stats[stat] = (parseInt(player.stats[stat]) || 0) + 1;
+                saveAppState();
+            }
+        }
+
+        function dropPlayer(id) {
+            if (confirm("Delete this player profile completely from the roster?")) {
+                players = players.filter(p => p.id !== id);
+                saveAppState();
+            }
+        }
+
+        function compileIndividualMessage(p) {
+            let type = currentTypeString();
+            let desc = document.getElementById('match-opponent').value.trim() || type;
+            let date = document.getElementById('match-date').value;
+
+            let msg = `📊 STAT REPORT: ${desc.toUpperCase()} (${date})\n`;
+            msg += `Player: #${p.jersey} ${p.name}\n`;
+            msg += `Position: ${p.position} | Age: ${p.age}\n`;
+            msg += `------------------------\n`;
+            msg += `⏱️ H1 Played: ${p.h1Play || '0'} min | Sat: ${p.h1Sat || '0'} min\n`;
+            msg += `⏱️ H2 Played: ${p.h2Play || '0'} min | Sat: ${p.h2Sat || '0'} min\n`;
+            msg += `------------------------\n`;
+            
+            statsSchema.forEach(stat => {
+                msg += `- ${stat}: ${(p.stats && p.stats[stat] !== undefined) ? p.stats[stat] : 0}\n`;
+            });
+            return msg;
+        }
+
+        function sendDirectIndividualShare(id, targetMedium) {
+            let p = players.find(player => player.id === id);
+            if (!p) return;
+            let text = compileIndividualMessage(p);
+
+            if (targetMedium === 'sms') {
+                window.location.href = `sms:?&body=${encodeURIComponent(text)}`;
+            } else {
+                window.location.href = `mailto:?subject=${encodeURIComponent(p.name + ' Match Data Update')}&body=${encodeURIComponent(text)}`;
+            }
+        }
+
+        function shareEntireRosterSummary(targetMedium) {
+            if (players.length === 0) {
+                alert("Roster is empty.");
+                return;
+            }
+            let type = currentTypeString();
+            let desc = document.getElementById('match-opponent').value.trim() || type;
+            let date = document.getElementById('match-date').value;
+
+            let masterMsg = `🏆 SQUAD SUMMARY: ${desc.toUpperCase()} (${date})\n`;
+            masterMsg += `========================\n\n`;
+
+            players.forEach(p => {
+                masterMsg += `#${p.jersey} ${p.name} (${p.position})\n`;
+                masterMsg += `H1 Play/Sat: ${p.h1Play||'0'}/${p.h1Sat||'0'}m | H2 Play/Sat: ${p.h2Play||'0'}/${p.h2Sat||'0'}m\n`;
+                statsSchema.forEach(stat => {
+                    masterMsg += `• ${stat}: ${(p.stats && p.stats[stat] !== undefined) ? p.stats[stat] : 0}  `;
+                });
+                masterMsg += `\n\n------------------------\n\n`;
+            });
+
+            if (targetMedium === 'sms') {
+                window.location.href = `sms:?&body=${encodeURIComponent(masterMsg)}`;
+            } else {
+                window.location.href = `mailto:?subject=${encodeURIComponent('Full Team Summary Report')}&body=${encodeURIComponent(masterMsg)}`;
+            }
+        }
+
+        function exportToCSV() {
+            if (players.length === 0) {
+                alert("No tracker entries available to export.");
+                return;
+            }
+
+            let headers = [
+                "Date", "Session Type", "Context Description", "Jersey #", "Player Name", 
+                "Position", "Age", "Height", "Weight", "H1 Played", "H1 Benched", "H2 Played", "H2 Benched"
+            ];
+            let combinedHeaders = headers.concat(statsSchema);
+            let rows = [combinedHeaders.join(',')];
+
+            let type = currentTypeString();
+            let desc = document.getElementById('match-opponent').value.trim() || type;
+            let date = document.getElementById('match-date').value;
+
+            players.forEach(p => {
+                let currentLine = [
+                    date, type, desc, p.jersey, p.name, p.position, p.age, p.height, p.weight,
+                    p.h1Play || "0", p.h1Sat || "0", p.h2Play || "0", p.h2Sat || "0"
+                ];
+                
+                statsSchema.forEach(stat => {
+                    currentLine.push((p.stats && p.stats[stat] !== undefined) ? p.stats[stat] : 0);
+                });
+
+                let formattedLine = currentLine.map(item => {
+                    let text = String(item);
+                    if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+                        text = '"' + text.replace(/"/g, '""') + '"';
+                    }
+                    return text;
+                });
+                rows.push(formattedLine.join(','));
+            });
+
+            let csvData = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            let downloadAnchor = document.createElement("a");
+            if (downloadAnchor.download !== undefined) {
+                let linkUrl = URL.createObjectURL(csvData);
+                downloadAnchor.setAttribute("href", linkUrl);
+                downloadAnchor.setAttribute("download", `soccer_stats_${date}.csv`);
+                downloadAnchor.setAttribute("style", "display:none");
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                document.body.removeChild(downloadAnchor);
+            }
+        }
+
+        function renderInterface() {
+            const badgeBox = document.getElementById('active-stats-list');
+            badgeBox.innerHTML = statsSchema.length === 0 ? '<span style="color:#888; font-size:13px;">No tracking items set.</span>' : '';
+            statsSchema.forEach(stat => {
+                let badge = document.createElement('span');
+                badge.className = 'field-badge';
+                badge.innerHTML = `${stat} <button class="remove-field-btn" onclick="removeStatField('${stat}')">×</button>`;
+                badgeBox.appendChild(badge);
+            });
+
+            const container = document.getElementById('roster-container');
+            container.innerHTML = '';
+
+            if (players.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#888; padding:10px;">Roster empty. Register players above.</p>';
+                return;
+            }
+
+            players.forEach(p => {
+                let playerRow = document.createElement('div');
+                playerRow.className = 'player-row';
+
+                let profile = document.createElement('div');
+                profile.className = 'player-profile';
+                profile.innerHTML = `
+   
