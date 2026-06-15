@@ -74,7 +74,9 @@
         }
         .btn-add { background-color: #0288d1; margin-bottom: 0; }
         .btn-delete { background-color: #d32f2f; padding: 6px 10px; width: auto; font-size: 13px; margin-bottom: 0; }
-        .btn-save { background-color: #ff9800; }
+        
+        .btn-sms { background-color: #ff9800; }
+        .btn-email { background-color: #0288d1; }
         .btn-csv { background-color: #157f43; }
         .btn-clear { background-color: #757575; margin-bottom: 0; }
     </style>
@@ -116,7 +118,7 @@
     <div class="box">
         <label>Add Dynamic Custom Skill Trackers:</label>
         <div class="row" style="margin-top: 4px;">
-            <input type="text" id="new-skill-name" placeholder="e.g. Header Wins, Steals, Crosses" style="flex: 2;">
+            <input type="text" id="new-skill-name" placeholder="e.g. Steals, Crosses, Tackles" style="flex: 2;">
             <button class="btn-add" onclick="addCustomSkillRow()" style="flex: 1;">Add Skill</button>
         </div>
     </div>
@@ -165,15 +167,18 @@
     </div>
 
     <div class="box" style="background: none; box-shadow: none; padding: 0;">
-        <button class="btn-save" onclick="saveData()">💾 Save to Phone Memory</button>
+        <div class="row">
+            <button class="btn-sms" onclick="shareStats('sms')">💬 Text Report</button>
+            <button class="btn-email" onclick="shareStats('email')">✉️ Email Report</button>
+        </div>
         <button class="btn-csv" onclick="exportCSV()">📊 Export to Spreadsheet (CSV)</button>
         <button class="btn-clear" onclick="clearData()">🔄 Reset Everything</button>
     </div>
 
     <script>
-        // Track unique custom skill identifiers in an active registry array list
         var registeredCustomSkills = [];
 
+        // Automatically pulls backup out of phone disk memory on start
         window.onload = function() {
             var saved = localStorage.getItem("soccer_tracker_pro_backup");
             if (saved) {
@@ -191,7 +196,6 @@
                 document.getElementById('s-assists').value = data.assists || "0";
                 document.getElementById('s-shots').value = data.shots || "0";
 
-                // Map clean elements and input data lines out from cold storage blocks
                 if (data.customSkillsList) {
                     data.customSkillsList.forEach(function(skill) {
                         buildSkillTableRowElement(skill.id, skill.name, skill.value);
@@ -202,45 +206,8 @@
             }
         };
 
-        function addCustomSkillRow() {
-            var inputField = document.getElementById('new-skill-name');
-            var nameString = inputField.value.trim();
-            if (!nameString) return;
-
-            // Generate clean isolated string keys using current unix timestamp tags
-            var generatedKeyId = "skill-" + Date.now();
-            buildSkillTableRowElement(generatedKeyId, nameString, 0);
-            
-            inputField.value = "";
-        }
-
-        function buildSkillTableRowElement(id, name, value) {
-            registeredCustomSkills.push({ id: id, name: name });
-
-            var tableContainerBody = document.getElementById('custom-skills-tbody');
-            var trRowNode = document.createElement('tr');
-            trRowNode.id = "row-container-" + id;
-            trRowNode.className = "custom-row";
-            
-            trRowNode.innerHTML = `
-                <td class="stat-name" style="padding-left: 6px;">${name}:</td>
-                <td><input type="number" id="input-node-${id}" class="num-input" value="${value}"></td>
-                <td style="text-align: right; padding-right: 6px;">
-                    <button class="btn-delete" onclick="removeSkillTableRowElement('${id}')">X</button>
-                </td>
-            `;
-            tableContainerBody.appendChild(trRowNode);
-        }
-
-        function removeSkillTableRowElement(id) {
-            var rowNode = document.getElementById("row-container-" + id);
-            if (rowNode) rowNode.remove();
-            
-            // Clean target out of the memory execution thread array maps
-            registeredCustomSkills = registeredCustomSkills.filter(item => item.id !== id);
-        }
-
-        function saveData() {
+        // Automatic saving mechanism captures modifications smoothly
+        function triggerAutoSave() {
             var state = {
                 date: document.getElementById('m-date').value,
                 desc: document.getElementById('m-desc').value,
@@ -263,12 +230,88 @@
                     };
                 })
             };
-            
             localStorage.setItem("soccer_tracker_pro_backup", JSON.stringify(state));
-            alert("Saved to phone hardware memory!");
+        }
+
+        function addCustomSkillRow() {
+            var inputField = document.getElementById('new-skill-name');
+            var nameString = inputField.value.trim();
+            if (!nameString) return;
+
+            var generatedKeyId = "skill-" + Date.now();
+            buildSkillTableRowElement(generatedKeyId, nameString, 0);
+            
+            inputField.value = "";
+            triggerAutoSave();
+        }
+
+        function buildSkillTableRowElement(id, name, value) {
+            registeredCustomSkills.push({ id: id, name: name });
+
+            var tableContainerBody = document.getElementById('custom-skills-tbody');
+            var trRowNode = document.createElement('tr');
+            trRowNode.id = "row-container-" + id;
+            trRowNode.className = "custom-row";
+            
+            trRowNode.innerHTML = `
+                <td class="stat-name" style="padding-left: 6px;">${name}:</td>
+                <td><input type="number" id="input-node-${id}" class="num-input" value="${value}" oninput="triggerAutoSave()"></td>
+                <td style="text-align: right; padding-right: 6px;">
+                    <button class="btn-delete" onclick="removeSkillTableRowElement('${id}')">X</button>
+                </td>
+            `;
+            tableContainerBody.appendChild(trRowNode);
+        }
+
+        function removeSkillTableRowElement(id) {
+            var rowNode = document.getElementById("row-container-" + id);
+            if (rowNode) rowNode.remove();
+            registeredCustomSkills = registeredCustomSkills.filter(item => item.id !== id);
+            triggerAutoSave();
+        }
+
+        // --- NEW COMPILE ENGINE FOR SHARING CURRENT VALUES LIVE ---
+        function generateShareText() {
+            var date = document.getElementById('m-date').value || "";
+            var desc = document.getElementById('m-desc').value || "Soccer Session";
+            var name = document.getElementById('p-name').value || "N/A";
+            var age = document.getElementById('p-age').value || "N/A";
+            var jersey = document.getElementById('p-jersey').value || "N/A";
+            
+            var text = "📊 SOCCER STAT REPORT: " + desc.toUpperCase() + " (" + date + ")\n";
+            text += "Player: #" + jersey + " " + name + " (Age " + age + ")\n";
+            text += "------------------------\n";
+            text += "⏱️ H1: " + document.getElementById('m-h1p').value + "m Played / " + document.getElementById('m-h1b').value + "m Bench\n";
+            text += "⏱️ H2: " + document.getElementById('m-h2p').value + "m Played / " + document.getElementById('m-h2b').value + "m Bench\n";
+            text += "------------------------\n";
+            text += "• Goals scored: " + document.getElementById('s-goals').value + "\n";
+            text += "• Assists: " + document.getElementById('s-assists').value + "\n";
+            text += "• Shots on Goal: " + document.getElementById('s-shots').value + "\n";
+            
+            // Loop and grab anything added dynamically
+            registeredCustomSkills.forEach(function(skill) {
+                var el = document.getElementById("input-node-" + skill.id);
+                var val = el ? el.value : "0";
+                text += "• " + skill.name + ": " + val + "\n";
+            });
+            
+            return text;
+        }
+
+        function shareStats(medium) {
+            triggerAutoSave(); // Safety lock values down first
+            var reportBody = generateShareText();
+            
+            if (medium === 'sms') {
+                // Generates dynamic deep links out to operating system messaging app channels
+                window.location.href = "sms:?&body=" + encodeURIComponent(reportBody);
+            } else {
+                window.location.href = "mailto:?subject=Soccer Performance Update&body=" + encodeURIComponent(reportBody);
+            }
         }
 
         function exportCSV() {
+            triggerAutoSave();
             var date = document.getElementById('m-date').value || "";
             var desc = document.getElementById('m-desc').value || "";
             var name = document.getElementById('p-name').value || "Player";
@@ -287,7 +330,6 @@
                 document.getElementById('s-shots').value
             ];
 
-            // Safely append custom field headers and values sequentially into array arrays
             registeredCustomSkills.forEach(function(skill) {
                 csvHeaders.push(skill.name);
                 var inputElement = document.getElementById("input-node-" + skill.id);
