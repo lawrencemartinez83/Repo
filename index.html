@@ -3,476 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer Session & Stat Tracker</title>
+    <title>Simple Soccer Tracker</title>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --secondary: #1b5e20;
-            --dark: #212121;
-            --light: #f5f5f5;
-            --accent: #0288d1;
-            --danger: #d32f2f;
-            --spreadsheet: #157f43;
-        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
             margin: 0;
-            padding: 15px;
-            background-color: var(--light);
-            color: var(--dark);
+            padding: 12px;
+            background-color: #f5f5f5;
+            color: #212121;
         }
-        h1, h3 { text-align: center; color: var(--secondary); margin: 5px 0 15px 0; }
+        h2 { text-align: center; color: #1b5e20; margin: 5px 0 15px 0; }
         
-        .card {
+        .box {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 12px;
         }
-        .form-row {
+        .row {
             display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
-        .checkbox-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            padding: 10px 0;
-            font-weight: bold;
-        }
-        .label-group {
+        .col {
             display: flex;
             flex-direction: column;
-            gap: 4px;
             flex: 1;
-            min-width: 0;
         }
-        .label-group label {
-            font-size: 12px;
+        label {
+            font-size: 11px;
             font-weight: bold;
-            color: var(--dark);
+            margin-bottom: 2px;
         }
-        input, button {
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 5px;
+        input {
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 4px;
             border: 1px solid #ccc;
             box-sizing: border-box;
             width: 100%;
         }
-        input[type="text"], input[type="date"], input[type="number"] { min-width: 0; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+        td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #eee;
+        }
+        .stat-name { font-weight: bold; font-size: 14px; }
+        .num-input { width: 65px; text-align: center; padding: 6px; font-size: 15px; }
         
         button {
-            background-color: var(--primary);
-            color: white;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 4px;
             border: none;
             cursor: pointer;
             font-weight: bold;
+            color: white;
+            width: 100%;
+            margin-bottom: 8px;
         }
-        
-        .player-entry {
-            padding: 5px 0;
-            margin-bottom: 10px;
-        }
-        .player-header {
-            font-weight: bold;
-            font-size: 18px;
-            color: var(--secondary);
-            margin-bottom: 15px;
-        }
-        
-        .time-box-container {
-            background: #edf7ed;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .half-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--secondary);
-            margin: 0;
-        }
-        .time-row-layout {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .time-row-layout:last-child { margin-bottom: 0; }
-        
-        .mini-input-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            max-width: 30%; 
-        }
-        .mini-input-wrapper label {
-            font-size: 13px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .mini-input-wrapper input {
-            padding: 9px; 
-            font-size: 16px; 
-            text-align: center;
-        }
-        
-        #dynamic-stat-zone {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        .stat-wrapper-row {
-            display: flex;
-            align-items: center;
-            background: #e3f2fd;
-            border: 1px solid #90caf9;
-            padding: 10px;
-            border-radius: 8px;
-            gap: 12px;
-        }
-        .stat-label-title {
-            font-weight: bold;
-            font-size: 15px;
-            flex: 2;
-            color: var(--dark);
-        }
-        .count-num {
-            font-size: 18px;
-            color: var(--accent);
-            font-weight: bold;
-            min-width: 35px;
-            text-align: center;
-        }
-        .plus-btn { background-color: var(--accent); padding: 8px 15px; font-size: 14px; width: auto; }
-        .trash-btn { background-color: var(--danger); padding: 8px 12px; font-size: 13px; width: auto; }
-        
-        .action-box-container {
-            margin-top: 20px;
-        }
-        .action-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .sms-btn { background-color: #ff9800; flex: 1; font-size: 14px; padding: 14px; width: auto; }
-        .email-btn { background-color: #0288d1; flex: 1; font-size: 14px; padding: 14px; width: auto; }
-        .master-btn { background-color: var(--spreadsheet); width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px; }
-        .clear-btn { background-color: #757575; width: 100%; padding: 10px; font-size: 13px; }
+        .btn-save { background-color: #ff9800; }
+        .btn-csv { background-color: #157f43; }
+        .btn-clear { background-color: #757575; margin-bottom: 0; }
     </style>
 </head>
 <body>
 
-    <h1>⚽ Soccer Session Tracker</h1>
+    <h2>⚽ Soccer Tracker</h2>
 
-    <div class="card">
-        <h3>1. Session Information</h3>
-        <div class="checkbox-group">
-            <label style="display:flex; align-items:center; gap:5px;">
-                <input type="radio" name="stype" id="p-game" onchange="autoSaveData()">
-                <span>Game</span>
-            </label>
-            <label style="display:flex; align-items:center; gap:5px;">
-                <input type="radio" name="stype" id="p-scrimmage" onchange="autoSaveData()">
-                <span>Scrimmage</span>
-            </label>
-            <label style="display:flex; align-items:center; gap:5px;">
-                <input type="radio" name="stype" id="p-practice" checked onchange="autoSaveData()">
-                <span>Practice</span>
-            </label>
-        </div>
-        <div class="form-row">
-            <input type="date" id="m-date" oninput="autoSaveData()">
-            <input type="text" id="m-desc" placeholder="Opponent Name / Notes" oninput="autoSaveData()">
+    <div class="box">
+        <div class="row">
+            <div class="col">
+                <label>Date:</label>
+                <input type="date" id="m-date">
+            </div>
+            <div class="col">
+                <label>Opponent / Notes:</label>
+                <input type="text" id="m-desc" placeholder="Game details">
+            </div>
         </div>
     </div>
 
-    <div class="card">
-        <h3>2. Custom Fields Manager</h3>
-        <div class="form-row">
-            <input type="text" id="custom-field-input" placeholder="Type metric (e.g. Goals, Miles Ran, Assists)">
-            <button style="background-color: var(--accent); width:auto; white-space:nowrap;" onclick="generateMetricField()">Create Field</button>
+    <div class="box">
+        <div class="row">
+            <div class="col" style="flex: 3;">
+                <label>Player Name:</label>
+                <input type="text" id="p-name" placeholder="Name">
+            </div>
+            <div class="col" style="flex: 1;">
+                <label>Jersey #:</label>
+                <input type="text" id="p-jersey" placeholder="#">
+            </div>
         </div>
     </div>
 
-    <div class="card">
-        <h3>3. Active Roster Metric Panel</h3>
-
-        <div class="player-entry">
-            <div class="player-header">⚽ Player Identity Data Configuration</div>
+    <div class="box">
+        <table>
+            <tr>
+                <td class="stat-name" style="color: #1b5e20;">1st Half Played Min:</td>
+                <td><input type="number" id="m-h1p" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name" style="color: #1b5e20;">1st Half Bench Min:</td>
+                <td><input type="number" id="m-h1b" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name" style="color: #1b5e20;">2nd Half Played Min:</td>
+                <td><input type="number" id="m-h2p" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name" style="color: #1b5e20;">2nd Half Bench Min:</td>
+                <td><input type="number" id="m-h2b" class="num-input" value="0"></td>
+            </tr>
             
-            <div class="form-row">
-                <div class="label-group" style="flex: 3;">
-                    <label>Player Name:</label>
-                    <input type="text" id="p1-name" placeholder="Enter full name" oninput="autoSaveData()">
-                </div>
-                <div class="label-group" style="flex: 1;">
-                    <label>Age:</label>
-                    <input type="number" id="p1-age" placeholder="Age" oninput="autoSaveData()">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="label-group" style="flex: 3;">
-                    <label>Player Position:</label>
-                    <input type="text" id="p1-position" placeholder="e.g. Midfielder, Forward" oninput="autoSaveData()">
-                </div>
-                <div class="label-group" style="flex: 1;">
-                    <label>Player Number:</label>
-                    <input type="text" id="p1-jersey" placeholder="#" oninput="autoSaveData()">
-                </div>
-            </div>
-            
-            <div class="time-box-container" style="margin-top:15px;">
-                <div class="time-row-layout">
-                    <span class="half-title" style="min-width:90px;">1st Half:</span>
-                    <div class="mini-input-wrapper">
-                        <label>Played:</label>
-                        <input type="number" id="p1-h1p" oninput="autoSaveData()">
-                    </div>
-                    <div class="mini-input-wrapper">
-                        <label>Benched:</label>
-                        <input type="number" id="p1-h1b" oninput="autoSaveData()">
-                    </div>
-                </div>
-                
-                <div class="time-row-layout" style="margin-top: 12px;">
-                    <span class="half-title" style="min-width:90px;">2nd Half:</span>
-                    <div class="mini-input-wrapper">
-                        <label>Played:</label>
-                        <input type="number" id="p1-h2p" oninput="autoSaveData()">
-                    </div>
-                    <div class="mini-input-wrapper">
-                        <label>Benched:</label>
-                        <input type="number" id="p1-h2b" oninput="autoSaveData()">
-                    </div>
-                </div>
-            </div>
-
-            <p style="font-weight:bold; margin:5px 0; font-size:14px; color:#555;">Tracked Performance Metrics:</p>
-            <div id="dynamic-stat-zone"></div>
-        </div>
+            <tr>
+                <td class="stat-name">Goals scored:</td>
+                <td><input type="number" id="s-goals" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name">Assists:</td>
+                <td><input type="number" id="s-assists" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name">Shots on Goal:</td>
+                <td><input type="number" id="s-shots" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name">Steals / Tackles:</td>
+                <td><input type="number" id="s-steals" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name">Saves:</td>
+                <td><input type="number" id="s-saves" class="num-input" value="0"></td>
+            </tr>
+            <tr>
+                <td class="stat-name">Fouls committed:</td>
+                <td><input type="number" id="s-fouls" class="num-input" value="0"></td>
+            </tr>
+        </table>
     </div>
 
-    <div class="card action-box-container">
-        <div class="action-row">
-            <button class="sms-btn" onclick="shareDataLink('sms')">💬 Text Player Report</button>
-            <button class="email-btn" onclick="shareDataLink('email')">✉️ Email Player Report</button>
-        </div>
-        <button class="master-btn" onclick="extractCSV()">📊 Export Stats to Spreadsheet (CSV)</button>
-        <button class="clear-btn" onclick="wipeFormFieldsReset()">🔄 Clear Form / Reset Values</button>
+    <div class="box" style="background: none; box-shadow: none; padding: 0;">
+        <button class="btn-save" onclick="saveData()">💾 Save to Phone Memory</button>
+        <button class="btn-csv" onclick="exportCSV()">📊 Export to Spreadsheet (CSV)</button>
+        <button class="btn-clear" onclick="clearData()">🔄 Reset Everything</button>
     </div>
 
     <script>
-        var assignedMetricFields = [];
-
+        // Set up the default date immediately on load
         window.onload = function() {
-            loadSavedData();
+            var saved = localStorage.getItem("soccer_simple_backup");
+            if (saved) {
+                var data = JSON.parse(saved);
+                document.getElementById('m-date').value = data.date || "";
+                document.getElementById('m-desc').value = data.desc || "";
+                document.getElementById('p-name').value = data.name || "";
+                document.getElementById('p-jersey').value = data.jersey || "";
+                document.getElementById('m-h1p').value = data.h1p || "0";
+                document.getElementById('m-h1b').value = data.h1b || "0";
+                document.getElementById('m-h2p').value = data.h2p || "0";
+                document.getElementById('m-h2b').value = data.h2b || "0";
+                document.getElementById('s-goals').value = data.goals || "0";
+                document.getElementById('s-assists').value = data.assists || "0";
+                document.getElementById('s-shots').value = data.shots || "0";
+                document.getElementById('s-steals').value = data.steals || "0";
+                document.getElementById('s-saves').value = data.saves || "0";
+                document.getElementById('s-fouls').value = data.fouls || "0";
+            } else {
+                document.getElementById('m-date').valueAsDate = new Date();
+            }
         };
 
-        // --- WRITES SNAPSHOT DIRECTLY TO THE PHONE ---
-        function autoSaveData() {
-            var sessionType = "Practice";
-            if (document.getElementById('p-game').checked) sessionType = "Game";
-            if (document.getElementById('p-scrimmage').checked) sessionType = "Scrimmage";
-
-            var appState = {
-                sessionType: sessionType,
+        function saveData() {
+            var state = {
                 date: document.getElementById('m-date').value,
                 desc: document.getElementById('m-desc').value,
-                name: document.getElementById('p1-name').value,
-                age: document.getElementById('p1-age').value,
-                position: document.getElementById('p1-position').value,
-                jersey: document.getElementById('p1-jersey').value,
-                h1p: document.getElementById('p1-h1p').value,
-                h1b: document.getElementById('p1-h1b').value,
-                h2p: document.getElementById('p1-h2p').value,
-                h2b: document.getElementById('p1-h2b').value,
-                customMetrics: assignedMetricFields.map(function(metric) {
-                    var targetNode = document.getElementById("val-" + metric.id);
-                    return {
-                        id: metric.id,
-                        labelName: metric.labelName,
-                        value: targetNode ? targetNode.innerText : "0"
-                    };
-                })
+                name: document.getElementById('p-name').value,
+                jersey: document.getElementById('p-jersey').value,
+                h1p: document.getElementById('m-h1p').value,
+                h1b: document.getElementById('m-h1b').value,
+                h2p: document.getElementById('m-h2p').value,
+                h2b: document.getElementById('m-h2b').value,
+                goals: document.getElementById('s-goals').value,
+                assists: document.getElementById('s-assists').value,
+                shots: document.getElementById('s-shots').value,
+                steals: document.getElementById('s-steals').value,
+                saves: document.getElementById('s-saves').value,
+                fouls: document.getElementById('s-fouls').value
             };
-
-            localStorage.setItem("soccer_tracker_backup", JSON.stringify(appState));
+            localStorage.setItem("soccer_simple_backup", JSON.stringify(state));
+            alert("Saved to phone hardware memory!");
         }
 
-        // --- READS BACKUP DIRECTLY FROM THE PHONE ---
-        function loadSavedData() {
-            var rawBackup = localStorage.getItem("soccer_tracker_backup");
+        function exportCSV() {
+            var date = document.getElementById('m-date').value || "";
+            var desc = document.getElementById('m-desc').value || "";
+            var name = document.getElementById('p-name').value || "Player";
+            var jersey = document.getElementById('p-jersey').value || "";
             
-            if (!rawBackup) {
+            var headers = ["Date", "Description", "Player Name", "Jersey", "H1 Played", "H1 Bench", "H2 Played", "H2 Bench", "Goals", "Assists", "Shots", "Steals", "Saves", "Fouls"];
+            var values = [
+                date, desc, name, jersey,
+                document.getElementById('m-h1p').value,
+                document.getElementById('m-h1b').value,
+                document.getElementById('m-h2p').value,
+                document.getElementById('m-h2b').value,
+                document.getElementById('s-goals').value,
+                document.getElementById('s-assists').value,
+                document.getElementById('s-shots').value,
+                document.getElementById('s-steals').value,
+                document.getElementById('s-saves').value,
+                document.getElementById('s-fouls').value
+            ];
+
+            var csvContent = headers.join(",") + "\n" + values.join(",");
+            var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "soccer_stats_" + name.toLowerCase().replace(/[^a-z0-9]/g, "_") + ".csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function clearData() {
+            if (confirm("Clear form and completely delete phone memory backup?")) {
+                localStorage.removeItem("soccer_simple_backup");
+                document.getElementById('m-desc').value = "";
+                document.getElementById('p-name').value = "";
+                document.getElementById('p-jersey').value = "";
+                document.getElementById('m-h1p').value = "0";
+                document.getElementById('m-h1b').value = "0";
+                document.getElementById('m-h2p').value = "0";
+                document.getElementById('m-h2b').value = "0";
+                document.getElementById('s-goals').value = "0";
+                document.getElementById('s-assists').value = "0";
+                document.getElementById('s-shots').value = "0";
+                document.getElementById('s-steals').value = "0";
+                document.getElementById('s-saves').value = "0";
+                document.getElementById('s-fouls').value = "0";
                 document.getElementById('m-date').valueAsDate = new Date();
-                document.getElementById('p1-name').value = "Striker One";
-                document.getElementById('p1-age').value = "12";
-                document.getElementById('p1-position').value = "Forward";
-                document.getElementById('p1-jersey').value = "9";
-                document.getElementById('p1-h1p').value = "0";
-                document.getElementById('p1-h1b').value = "0";
-                document.getElementById('p1-h2p').value = "0";
-                document.getElementById('p1-h2b').value = "0";
-                return;
-            }
-
-            var savedState = JSON.parse(rawBackup);
-
-            document.getElementById('m-date').value = savedState.date || "";
-            document.getElementById('m-desc').value = savedState.desc || "";
-            document.getElementById('p1-name').value = savedState.name || "";
-            document.getElementById('p1-age').value = savedState.age || "";
-            document.getElementById('p1-position').value = savedState.position || "";
-            document.getElementById('p1-jersey').value = savedState.jersey || "";
-            document.getElementById('p1-h1p').value = savedState.h1p || "0";
-            document.getElementById('p1-h1b').value = savedState.h1b || "0";
-            document.getElementById('p1-h2p').value = savedState.h2p || "0";
-            document.getElementById('p1-h2b').value = savedState.h2b || "0";
-
-            document.getElementById('p-game').checked = (savedState.sessionType === "Game");
-            document.getElementById('p-scrimmage').checked = (savedState.sessionType === "Scrimmage");
-            document.getElementById('p-practice').checked = (savedState.sessionType === "Practice");
-
-            var zone = document.getElementById('dynamic-stat-zone');
-            zone.innerHTML = "";
-            assignedMetricFields = [];
-
-            if (savedState.customMetrics) {
-                savedState.customMetrics.forEach(function(metricData) {
-                    assignedMetricFields.push({ id: metricData.id, labelName: metricData.labelName });
-                    
-                    var wrapperRow = document.createElement('div');
-                    wrapperRow.className = "stat-wrapper-row";
-                    wrapperRow.id = "wrap-" + metricData.id;
-                    wrapperRow.innerHTML = `
-                        <span class="stat-label-title">${metricData.labelName}:</span>
-                        <span class="count-num" id="val-${metricData.id}">${metricData.value}</span>
-                        <button class="plus-btn" onclick="incrementStat('${metricData.id}')">+1</button>
-                        <button class="trash-btn" onclick="destroyMetricField('${metricData.id}')">Delete</button>
-                    `;
-                    zone.appendChild(wrapperRow);
-                });
             }
         }
-
-        // --- ISOLATED SAFE CREATION TECHNIQUE ---
-        function generateMetricField() {
-            var inputNode = document.getElementById('custom-field-input');
-            var rawName = inputNode.value.trim();
-            
-            if (!rawName) {
-                alert("Please type a metric field name first!");
-                return;
-            }
-
-            var elementIdSafe = "metric-" + Date.now();
-            
-            // Push object to data register array
-            assignedMetricFields.push({ id: elementIdSafe, labelName: rawName });
-
-            // Build structural UI elements row
-            var wrapperRow = document.createElement('div');
-            wrapperRow.className = "stat-wrapper-row";
-            wrapperRow.id = "wrap-" + elementIdSafe;
-            wrapperRow.innerHTML = `
-                <span class="stat-label-title">${rawName}:</span>
-                <span class="count-num" id="val-${elementIdSafe}">0</span>
-                <button class="plus-btn" onclick="incrementStat('${elementIdSafe}')">+1</button>
-                <button class="trash-btn" onclick="destroyMetricField('${elementIdSafe}')">Delete</button>
-            `;
-
-            document.getElementById('dynamic-stat-zone').appendChild(wrapperRow);
-            inputNode.value = "";
-            
-            // Force immediate lock to device data storage disk
-            autoSaveData(); 
-        }
-
-        function incrementStat(targetId) {
-            var counterNode = document.getElementById("val-" + targetId);
-            if (counterNode) {
-                var parsedVal = parseInt(counterNode.innerText) || 0;
-                counterNode.innerText = parsedVal + 1;
-                autoSaveData(); 
-            }
-        }
-
-        function destroyMetricField(targetId) {
-            if (confirm("Are you sure you want to completely delete this metric field? All counted data for it will be removed.")) {
-                var targetRowElement = document.getElementById("wrap-" + targetId);
-                if (targetRowElement) { targetRowElement.remove(); }
-                assignedMetricFields = assignedMetricFields.filter(item => item.id !== targetId);
-                autoSaveData(); 
-            }
-        }
-
-        function getSessionType() {
-            if(document.getElementById('p-game').checked) return "Game";
-            if(document.getElementById('p-scrimmage').checked) return "Scrimmage";
-            return "Practice";
-        }
-
-        function compileDataMessageText() {
-            var name = document.getElementById('p1-name').value || "N/A";
-            var age = document.getElementById('p1-age').value || "N/A";
-            var pos = document.getElementById('p1-position').value || "N/A";
-            var jrs = document.getElementById('p1-jersey').value || "N/A";
-            var h1p = document.getElementById('p1-h1p').value || "0";
-            var h1b = document.getElementById('p1-h1b').value || "0";
-            var h2p = document.getElementById('p1-h2p').value || "0";
-            var h2b = document.getElementById('p1-h2b').value || "0";
-            var date = document.getElementById('m-date').value || "";
-            var type = getSessionType();
-            var desc = document.getElementById('m-desc').value || type;
-
-            var txt = "📊 STAT REPORT: " + desc.toUpperCase() + " (" + date + ")\n";
-            txt += "Player: #" + jrs + " " + name + "\n";
-            txt += "Pos: " + pos + " | Age: " + age + "\n";
-            txt += "------------------------\n";
-            txt += "⏱️ H1: " + h1p + "m Played / " + h1b + "m Bench\n";
-            txt += "⏱️ H2: " + h2p + "m Played / " + h2b + "m Bench\n";
-            txt += "------------------------\n";
-            
-            if (assignedMetricFields.length === 0) {
-                txt += "No performance metrics recorded.";
-            } else {
-                assignedMetricFields.forEach(function(metric) {
-                    var node = document.getElementById("val-" + metric.id);
-                    var val = node ? node.innerText : "0";
-                    txt += "• " + metric.labelName + ": " + val + "\n";
-                });
-            }
-            return txt;
-        }
-
-        function shareDataLink(medium) {
-            var msg = compileDataMessageText();
-            if(medium === 'sms') {
-                window.location.href = "sms:?&body=" + encodeURIComponent(msg);
-            } else {
-                window.location.href = "mailto:?subject=Soccer Performance Update&body=" + encodeURIComponent(msg);
-            }
-        }
-
-        function extractCSV() {
-            var name = document.getElementById('p1-name').value || "N/A";
-            var age = document.getElementById('p1-age').value || "N/A";
-            var pos = document.getElementById('p1-position').value || "N/A";
-            var jrs = document.getElementById('p1-jersey').value || "N/A";
-            var h1p = document.getElementById('p1-h1p').value || "0";
-            var h1b = document.getElementById('p1-h1b').value || "0";
-            var h2p = document.getElementById('p1-h2p').value || "0";
-            var h2b = document.getElementById('p1-h2b').value || "0";
-            var date = document.getElementById('m-date').value || "";
-            var type = getSessionType();
-            var desc = document.getElementById('m-desc').value || type;
-
-            var csvHeaders = ["Date", "Session Type", "Description", "Player Name", "Age", "Position", "Jersey #", "H1 Played", "H1 Bench", "H2 Played", "H2 Bench"];
-    
+    </script>
+</body>
+</html>
